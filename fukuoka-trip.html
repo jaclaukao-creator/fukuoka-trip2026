@@ -5,6 +5,11 @@
 <!-- 手機優先：這一行讓網頁在手機上以正確寬度顯示 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>第一次去福岡 好福氣旅行團</title>
+<!-- 左上角小圖示(favicon)：土陶色圓角底＋白色「福」 -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='24'%20fill='%23C87D55'/%3E%3Ctext%20x='50'%20y='73'%20font-size='62'%20text-anchor='middle'%20fill='white'%20font-family='serif'%20font-weight='bold'%3E福%3C/text%3E%3C/svg%3E">
+<!-- 手機加到主畫面時顯示的標題 -->
+<meta name="apple-mobile-web-app-title" content="福岡好福氣">
+<meta name="theme-color" content="#C87D55">
 
 <!-- ① Tailwind CSS：用 class 就能排版，不用自己寫一堆 CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -77,6 +82,7 @@
       <button id="top-tab-overview"   class="top-nav-item active px-3 py-3 whitespace-nowrap" onclick="switchMainTab('overview')">總覽</button>
       <button id="top-tab-itinerary"  class="top-nav-item px-3 py-3 whitespace-nowrap" onclick="switchMainTab('itinerary')">行程</button>
       <button id="top-tab-festival"   class="top-nav-item px-3 py-3 whitespace-nowrap" onclick="switchMainTab('festival')">慶典</button>
+      <button id="top-tab-alt"        class="top-nav-item px-3 py-3 whitespace-nowrap" onclick="switchMainTab('alt')">備選</button>
       <button id="top-tab-japanese"   class="top-nav-item px-3 py-3 whitespace-nowrap" onclick="switchMainTab('japanese')">保命日語</button>
       <button id="top-tab-shopping"   class="top-nav-item px-3 py-3 whitespace-nowrap" onclick="switchMainTab('shopping')">必買</button>
       <button id="top-tab-accounting" class="top-nav-item px-3 py-3 whitespace-nowrap" onclick="switchMainTab('accounting')">分帳</button>
@@ -124,6 +130,17 @@
       <i data-lucide="hotel" class="w-4 h-4 text-brand"></i>
       <span>飯店：博多站前 ○○ Hotel（近博多站，可放行李）</span>
     </div>
+  </div>
+
+  <!-- 天氣・穿搭 -->
+  <h2 class="font-serif text-xl font-bold mt-6 mb-2 flex items-center gap-2">
+    <i data-lucide="cloud-sun" class="w-5 h-5 text-brand"></i>天氣・穿搭（晚秋）
+  </h2>
+  <div class="bg-white rounded-2xl p-4 shadow-sm text-sm leading-relaxed space-y-2">
+    <p>10月底~11月初的福岡是<b class="text-brandDark">舒服的晚秋</b>：白天約 <b>18~20°C</b>、早晚只剩 <b>10~12°C</b>，日夜溫差大。</p>
+    <p><b class="text-brandDark">穿搭：</b>洋蔥式最保險——長袖／針織＋一件薄外套，早晚或進冷氣店再加件。</p>
+    <p><b class="text-brandDark">雨具：</b>秋天雨不多，但帶把摺疊傘或薄防水外套備用。</p>
+    <p><b class="text-brandDark">提醒：</b>此時日照變短、天黑得早（約17:30後），想拍景點早點出發；正逢賞楓季開始（見「慶典」頁竈門神社）。</p>
   </div>
 
   <!-- 總預算明細 -->
@@ -217,8 +234,15 @@
 <!-- ============================================================= -->
 <section id="view-itinerary" class="main-view">
 
-  <!-- 每一天的小分頁（1～4） -->
+  <!-- 每一天的小分頁 -->
   <div id="day-tabs" class="flex gap-2 mt-4 overflow-x-auto no-scrollbar"></div>
+
+  <!-- 圖例 -->
+  <div class="flex items-center gap-3 mt-3 text-[11px] text-gray-500 flex-wrap">
+    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-brand"></span>順路輕鬆玩</span>
+    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-400"></span>可省略加碼</span>
+    <span>· 🍽 餐點點開看3家推薦 · ✦ 景點點開玩小探索</span>
+  </div>
 
   <!-- 當天地圖 -->
   <div class="rounded-2xl overflow-hidden shadow-sm mt-3 border border-[#EADFD4]">
@@ -245,6 +269,16 @@
   <p class="text-sm text-gray-500 mb-4">你們檔期(10/30~11/04)剛好遇到的活動，點連結看介紹，再決定要不要排進行程</p>
   <div id="festival-container" class="space-y-4"></div>
   <p class="text-center text-xs text-gray-400 mt-6">日期以官網為準，出發前再確認一次</p>
+</section>
+
+<!-- ============================================================= -->
+<!-- 分頁：備選（沒排進行程的九州必去＋傳統美食，臨時想改也有參考） -->
+<!-- ============================================================= -->
+<section id="view-alt" class="main-view">
+  <h2 class="font-serif text-2xl font-bold mt-5 mb-1">備選口袋名單 🎒</h2>
+  <p class="text-sm text-gray-500 mb-4">沒排進行程、但很值得的九州景點與傳統美食。臨時想換、有空檔，就從這裡挑</p>
+  <div id="alt-container" class="space-y-5"></div>
+  <p class="text-center text-xs text-gray-400 mt-6">點「地圖・評價」看位置與評分，「影片」看網友介紹</p>
 </section>
 
 <!-- ============================================================= -->
@@ -348,6 +382,24 @@
   </div>
 </div>
 
+<!-- 餐點 3 選 Modal -->
+<div id="dining-modal" class="hidden fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-4" onclick="if(event.target===this)closeDining()">
+  <div class="bg-cream rounded-3xl p-6 w-full max-w-md max-h-[82vh] overflow-y-auto">
+    <div class="flex justify-between items-start mb-1">
+      <div class="flex items-center gap-2">
+        <div class="w-10 h-10 rounded-full bg-brand/15 flex items-center justify-center">
+          <i data-lucide="utensils" class="w-5 h-5 text-brand"></i>
+        </div>
+        <h3 id="dining-title" class="font-serif text-xl font-bold"></h3>
+      </div>
+      <button onclick="closeDining()"><i data-lucide="x" class="w-5 h-5 text-gray-400"></i></button>
+    </div>
+    <p id="dining-tip" class="text-sm text-gray-500 mb-4"></p>
+    <div id="dining-list" class="space-y-3"></div>
+    <p class="text-[11px] text-gray-400 mt-4">點「地圖・評價」看最新評分與照片，「影片」看網友實吃分享。</p>
+  </div>
+</div>
+
 <!-- Toast -->
 <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-ink text-white text-sm px-4 py-2 rounded-full opacity-0 pointer-events-none z-50"></div>
 
@@ -365,8 +417,8 @@ const MEMBERS = ['安妮姐','崇慧','小佩','懷茹','yoyo'];
 const tripDaysData = {
   1: {
     dateStr: "10.30 (五)",
-    title: "抵達 · 博多初體驗 · 屋台聚餐",
-    desc: "落地福岡 → 放行李 → Canal City 逛街 → 中洲屋台開吃",
+    title: "輕鬆抵達 · 博多初體驗",
+    desc: "不趕行程：落地 → 放行李 → 附近逛逛 → 屋台晚餐",
     mapQuery: "Canal City Hakata",
     transport: "地下鐵空港線(空港→博多 6分¥260)＋市區地鐵，全程刷IC卡",
     budget: "約 ¥4,500 /人(交通+屋台晚餐，不含購物)",
@@ -375,18 +427,20 @@ const tripDaysData = {
       { title: "中洲屋台", sub: "河畔夜市小攤", key: "d1_yatai" },
     ],
     activities: [
-      { time:"08:20", icon:"plane",     title:"桃園 → 福岡 FUK",     sub:"約 2 小時，落地約 11:40", category:"交通" },
-      { time:"12:30", icon:"train-front", title:"地下鐵進市區",       sub:"空港線 6 分到博多站（¥260）", category:"交通" },
-      { time:"13:00", icon:"hotel",     title:"飯店寄放行李",          sub:"太早不能 check-in，先寄行李", category:"住宿" },
-      { time:"13:30", icon:"utensils",  title:"午餐：Shin-Shin 拉麵", sub:"天神本店 · 細麵豚骨", category:"餐飲" },
-      { time:"15:00", icon:"shopping-bag", title:"Canal City 博多",   sub:"運河城，整點有噴泉秀", category:"景點" },
-      { time:"18:30", icon:"lamp",      title:"中洲屋台晚餐",          sub:"豚骨拉麵／關東煮／烤雞串", category:"餐飲" },
+      { time:"11:20", icon:"plane",     title:"抵達福岡機場",         sub:"入境、領行李、上網測試", category:"交通" },
+      { time:"12:20", icon:"train-front", title:"地下鐵進市區",       sub:"空港線 6 分到博多站（¥260）", category:"交通" },
+      { time:"13:00", icon:"hotel",     title:"飯店寄行李",            sub:"太早不能入住，先寄行李", category:"住宿" },
+      { time:"13:30", icon:"utensils",  title:"午餐：博多拉麵",        sub:"點我看 3 家推薦", category:"餐飲", dining:"d1_lunch", opt:false },
+      { time:"14:45", icon:"landmark",  title:"櫛田神社・東長寺",       sub:"博多老街寺廟、博多大佛(古建築、居民信仰)", category:"景點", opt:false },
+      { time:"15:45", icon:"shopping-bag", title:"Canal City 博多",   sub:"運河城，整點噴泉秀(加碼)", category:"景點", opt:true },
+      { time:"16:30", icon:"hotel",     title:"回飯店休息",            sub:"進房、歇腳、養精神", category:"住宿" },
+      { time:"18:30", icon:"lamp",      title:"中洲屋台晚餐",          sub:"點我看 3 家推薦", category:"餐飲", dining:"d1_dinner", opt:false },
     ]
   },
   2: {
     dateStr: "10.31 (六)",
-    title: "太宰府 · 表參道 · 天神逛街",
-    desc: "太宰府天満宮參拜 → 梅ヶ枝餅 → 表參道星巴克 → 天神買到手軟",
+    title: "太宰府半日 · 午後悠閒",
+    desc: "太宰府參拜＋梅ヶ枝餅 → 回天神午休 → 傍晚もつ鍋",
     mapQuery: "太宰府天満宮",
     transport: "西鐵天神→太宰府(二日市換車)來回約¥1,000，或買「太宰府散策きっぷ」",
     budget: "約 ¥5,500 /人(交通+梅ヶ枝餅+もつ鍋+御守)",
@@ -395,82 +449,83 @@ const tripDaysData = {
       { title: "御守", sub: "學業・戀愛都靈", key: "d2_omamori" },
     ],
     activities: [
-      { time:"09:00", icon:"train",     title:"西鐵前往太宰府",        sub:"天神→二日市換車，約 30 分", category:"交通" },
-      { time:"10:00", icon:"torii-gate",title:"太宰府天満宮",          sub:"學問之神，求學業", category:"景點" },
-      { time:"11:00", icon:"coffee",    title:"表參道 · 星巴克",        sub:"隈研吾設計的木構名店", category:"景點" },
-      { time:"12:30", icon:"utensils",  title:"午餐：竈門神社周邊",     sub:"或回天神吃 もつ鍋", category:"餐飲" },
-      { time:"15:00", icon:"shopping-bag", title:"天神地下街",         sub:"迷宮般的地下購物街", category:"購物" },
-      { time:"18:30", icon:"soup",      title:"晚餐：もつ鍋 · 樂天地", sub:"福岡名物內臟鍋", category:"餐飲" },
+      { time:"09:30", icon:"train",     title:"西鐵前往太宰府",        sub:"睡飽再出發，約 30 分", category:"交通" },
+      { time:"10:30", icon:"torii-gate",title:"太宰府天満宮",          sub:"參道平緩好走、求御守", category:"景點", opt:false },
+      { time:"11:15", icon:"cookie",    title:"梅ヶ枝餅 現烤",         sub:"點我看 3 家推薦", category:"餐飲", dining:"d2_mochi", opt:false },
+      { time:"11:45", icon:"coffee",    title:"表參道星巴克",          sub:"隈研吾木構名店，人多可跳過", category:"景點", opt:true },
+      { time:"12:30", icon:"utensils",  title:"太宰府／表參道午餐",     sub:"點我看 3 家推薦", category:"餐飲", dining:"d2_lunch", opt:false },
+      { time:"14:30", icon:"hotel",     title:"回天神／博多午休",       sub:"歇腳、避開午後最累的時段", category:"住宿" },
+      { time:"16:00", icon:"shopping-bag", title:"【崇慧採購】天神電器・美妝藥品", sub:"ビックカメラ天神＋ドン・キホーテ天神本店＋大國藥妝，一次買足", category:"購物", opt:false },
+      { time:"18:30", icon:"soup",      title:"晚餐：もつ鍋",          sub:"點我看 3 家推薦", category:"餐飲", dining:"d2_dinner", opt:false },
     ]
   },
   3: {
     dateStr: "11.01 (日)",
-    title: "糸島一日遊 · 海景咖啡",
-    desc: "夫婦岩 → 海邊鞦韆 → 網美咖啡 → 晚上一蘭總本店",
-    mapQuery: "糸島 夫婦岩 二見ヶ浦",
-    transport: "糸島景點分散→建議5人合租包車一日(分攤約¥3,000~4,000/人)。預約:KKday／Klook 搜「福岡包車」，或請飯店叫在地計程車包車(約¥30,000/車/天)",
-    budget: "約 ¥8,000 /人(包車+海鮮午餐+咖啡+一蘭)",
+    title: "柳川水鄉 · 遊船＋鰻魚",
+    desc: "九州威尼斯：坐船遊護城河水鄉 → 鰻魚せいろ蒸し → 老街散步(全程輕鬆、多為坐著)",
+    mapQuery: "柳川 川下り 乗船場",
+    transport: "西鐵天神→西鐵柳川 特急約50分(¥870)，可買「太宰府・柳川観光きっぷ」更省；車站到乘船場有免費接駁",
+    budget: "約 ¥6,000 /人(來回車資+遊船約¥1,800+鰻魚飯)",
     highlights: [
-      { title: "海景鞦韆", sub: "IG 打卡點", key: "d3_swing" },
-      { title: "替玉", sub: "拉麵加麵挑戰", key: "d3_kaedama" },
+      { title: "川下り遊船", sub: "船夫搖櫓唱歌", key: "d3_boat" },
+      { title: "鰻魚せいろ蒸し", sub: "柳川名物", key: "d3_unagi" },
     ],
     activities: [
-      { time:"09:30", icon:"car",       title:"包車／巴士前往糸島",     sub:"郊區景點分散，包車最順", category:"交通" },
-      { time:"10:30", icon:"waves",     title:"櫻井二見ヶ浦 夫婦岩",    sub:"海上鳥居與夫婦岩", category:"景點" },
-      { time:"12:00", icon:"utensils",  title:"海邊午餐",              sub:"牡蠣小屋或海景餐廳", category:"餐飲" },
-      { time:"14:00", icon:"camera",    title:"糸島網美咖啡巡禮",       sub:"白色鞦韆・天使翅膀牆", category:"景點" },
-      { time:"18:00", icon:"train-front", title:"回博多市區",          sub:"", category:"交通" },
-      { time:"19:30", icon:"utensils",  title:"晚餐：一蘭 總本店",     sub:"發源地本店，可挑戰替玉", category:"餐飲" },
+      { time:"09:30", icon:"train",     title:"西鐵前往柳川",          sub:"睡飽出發，特急約 50 分", category:"交通" },
+      { time:"10:45", icon:"sailboat",  title:"柳川川下り 遊船",       sub:"約70分坐船遊水鄉，船夫搖櫓，長輩超適合", category:"景點", opt:false },
+      { time:"12:15", icon:"utensils",  title:"午餐：鰻魚せいろ蒸し",   sub:"點我看 3 家推薦", category:"餐飲", dining:"d3_lunch", opt:false },
+      { time:"14:00", icon:"landmark",  title:"御花・立花氏庭園",       sub:"舊藩主宅邸與名勝松濤園(古蹟名園)", category:"景點", opt:true },
+      { time:"15:30", icon:"store",     title:"柳川老街散步",          sub:"水邊老鋪、和菓子，慢慢逛", category:"景點", opt:true },
+      { time:"16:30", icon:"train-front", title:"回博多市區",          sub:"", category:"交通" },
+      { time:"18:30", icon:"utensils",  title:"晚餐：博多拉麵",        sub:"點我看 3 家推薦", category:"餐飲", dining:"d3_dinner", opt:false },
     ]
   },
   4: {
     dateStr: "11.02 (一)",
-    title: "門司港 · 小倉復古一日遊",
-    desc: "門司港レトロ懷舊街 → 燒咖哩 → 小倉城 → 旦過市場",
+    title: "門司港復古散步 · 小倉傳統市場",
+    desc: "門司港海邊平緩好走 → 燒咖哩 → 小倉城(加碼) → 旦過傳統市場",
     mapQuery: "門司港レトロ",
-    transport: "JR鹿兒島本線快速，博多⇄門司港來回約¥2,640(小倉在同一條線上，順路下車不繞路)",
-    budget: "約 ¥7,000 /人(JR+燒咖哩+水炊き晚餐+小倉城門票)",
+    transport: "JR鹿兒島本線快速，博多⇄門司港來回約¥2,640(小倉同線順路，可下可不下)",
+    budget: "約 ¥6,000~7,000 /人(JR+燒咖哩+水炊き；小倉城加碼)",
     highlights: [
       { title: "燒咖哩", sub: "門司港名物", key: "d4_curry" },
-      { title: "小倉城", sub: "天守閣眺望", key: "d4_castle" },
+      { title: "小倉城", sub: "天守閣眺望(加碼)", key: "d4_castle" },
     ],
     activities: [
-      { time:"08:30", icon:"train",     title:"JR 直達門司港",         sub:"博多搭快速，約1.5小時(¥1,310)", category:"交通" },
-      { time:"10:00", icon:"building",  title:"門司港復古地區",        sub:"大正洋風建築、海峽廣場散步", category:"景點" },
-      { time:"12:00", icon:"utensils",  title:"午餐：焼きカレー",       sub:"門司港名物燒咖哩", category:"餐飲" },
-      { time:"14:00", icon:"train-front", title:"JR 回小倉",          sub:"門司港→小倉約15分(¥280)", category:"交通" },
-      { time:"14:40", icon:"castle",    title:"小倉城",               sub:"天守閣眺望(門票約¥350)", category:"景點" },
-      { time:"16:00", icon:"shopping-bag", title:"旦過市場",          sub:"小倉的廚房，在地小吃", category:"景點" },
-      { time:"18:30", icon:"utensils",  title:"晚餐：水炊き",          sub:"小倉→博多約15分，回博多吃雞白湯鍋", category:"餐飲" },
+      { time:"09:00", icon:"train",     title:"JR 直達門司港",         sub:"博多快速約1.5小時(¥1,310)", category:"交通" },
+      { time:"10:30", icon:"building",  title:"門司港復古地區",        sub:"大正洋風建築、海邊平緩好走(古建築)", category:"景點", opt:false },
+      { time:"12:00", icon:"utensils",  title:"午餐：門司港燒咖哩",     sub:"點我看 3 家推薦", category:"餐飲", dining:"d4_lunch", opt:false },
+      { time:"13:30", icon:"waves",     title:"關門海峽海邊散步",       sub:"看海、坐潮風号觀光列車", category:"景點", opt:false },
+      { time:"15:00", icon:"castle",    title:"小倉城(加碼)",          sub:"回程小倉下車；累了可略過直接回", category:"景點", opt:true },
+      { time:"16:00", icon:"store",     title:"旦過市場(傳統市場)",     sub:"小倉的廚房、百年老市場、在地小吃，媽媽會喜歡", category:"景點", opt:true },
+      { time:"18:30", icon:"utensils",  title:"晚餐：水炊き",          sub:"點我看 3 家推薦", category:"餐飲", dining:"d4_dinner", opt:false },
     ]
   },
   5: {
     dateStr: "11.03 (二)",
-    title: "佐賀熱氣球節 · 唐津くんち一日遊",
-    desc: "清晨百顆熱氣球升空 → 移動唐津 → 御旅所神幸14台曳山（需早起）",
-    mapQuery: "佐賀市 嘉瀬川河川敷 バルーン",
-    transport: "JR特急，博多→佐賀約40分、唐津→博多約80分(來回約¥3,500)。祭典日人多，車班先查好",
-    budget: "約 ¥8,500 /人(JR來回+餐；熱氣球節、唐津くんち皆免費入場)",
+    title: "唐津くんち祭典日（熱氣球加碼）",
+    desc: "白天坐著看14台曳山巡行；想看熱氣球再加碼(清晨升空要早起，或看傍晚點燈)",
+    mapQuery: "唐津神社",
+    transport: "JR直通到唐津約80分。佐賀熱氣球為加碼(佐賀約40分)：清晨升空需5:30出發，或改看傍晚點燈較不累",
+    budget: "約 ¥7,000~8,500 /人(JR來回+餐；祭典、熱氣球皆免費入場)",
     highlights: [
-      { title: "熱氣球升空", sub: "清晨一齊離陸", key: "d5_balloon" },
+      { title: "熱氣球升空", sub: "清晨一齊離陸(加碼)", key: "d5_balloon" },
       { title: "唐津曳山", sub: "14台巨型花車", key: "d5_kunchi" },
     ],
     activities: [
-      { time:"05:30", icon:"alarm-clock", title:"早起出發往佐賀",       sub:"要趕清晨升空一定得早起", category:"交通" },
-      { time:"07:00", icon:"sunrise",   title:"佐賀熱氣球節 一齊離陸", sub:"約100顆熱氣球同時升空", category:"景點" },
-      { time:"09:30", icon:"camera",    title:"會場周邊 · 氣球攤位",   sub:"造型氣球、市集、拍照", category:"景點" },
-      { time:"11:00", icon:"train",     title:"移動前往唐津",          sub:"佐賀→唐津約 1 小時", category:"交通" },
-      { time:"12:30", icon:"utensils",  title:"午餐：呼子花枝／唐津漢堡", sub:"唐津在地名物", category:"餐飲" },
-      { time:"14:00", icon:"party-popper", title:"唐津くんち 御旅所神幸", sub:"14台豪華曳山巡行(高潮)", category:"景點" },
-      { time:"16:30", icon:"castle",    title:"唐津城／舊唐津銀行",     sub:"順遊，登城看海", category:"景點" },
-      { time:"18:00", icon:"train-front", title:"回博多市區",          sub:"唐津→博多約 80 分", category:"交通" },
+      { time:"05:30", icon:"alarm-clock", title:"(加碼)佐賀熱氣球 清晨升空", sub:"想看百顆一齊升空才需早起，不勉強長輩", category:"景點", opt:true },
+      { time:"09:30", icon:"train",     title:"睡飽出發往唐津",        sub:"約80分，不用趕", category:"交通" },
+      { time:"11:30", icon:"utensils",  title:"唐津午餐",             sub:"點我看 3 家推薦", category:"餐飲", dining:"d5_lunch", opt:false },
+      { time:"13:30", icon:"party-popper", title:"唐津くんち 曳山巡行", sub:"找位子坐著看14台大花車經過(傳統祭典)", category:"景點", opt:false },
+      { time:"15:00", icon:"landmark",  title:"唐津神社・舊唐津銀行",   sub:"辰野金吾洋館(古建築)，想走再去，不然找咖啡歇腳", category:"景點", opt:true },
+      { time:"17:00", icon:"train-front", title:"回博多",             sub:"", category:"交通" },
     ]
   },
   6: {
     dateStr: "11.04 (三)",
-    title: "採買伴手禮 · 賦歸",
-    desc: "博多站掃貨明太子 → JR博多城頂樓 → 機場快閃 → 回家",
-    mapQuery: "JR博多シティ",
+    title: "柳橋早市 · 悠閒賦歸",
+    desc: "博多老早市逛逛 → 崇慧博多站補貨 → 最後一餐 → 下午飛回台北",
+    mapQuery: "柳橋連合市場",
     transport: "地下鐵 博多⇄福岡空港 6分¥260(全日本最近的機場)",
     budget: "約 ¥2,500 /人(交通+午餐；伴手禮另計)",
     highlights: [
@@ -478,12 +533,12 @@ const tripDaysData = {
       { title: "通りもん", sub: "福岡必買銘菓", key: "d6_toorimon" },
     ],
     activities: [
-      { time:"09:00", icon:"hotel",     title:"退房・寄行李",          sub:"", category:"住宿" },
-      { time:"09:30", icon:"shopping-bag", title:"博多站・阪急・東急手創", sub:"明太子・通りもん・藥妝", category:"購物" },
-      { time:"11:30", icon:"building",  title:"JR博多城 頂樓庭園",      sub:"つばめの杜ひろば 眺望", category:"景點" },
-      { time:"13:00", icon:"utensils",  title:"最後一餐：資さんうどん", sub:"福岡在地烏龍麵", category:"餐飲" },
-      { time:"16:00", icon:"train",     title:"地下鐵前往福岡空港",     sub:"博多站 6 分鐘到", category:"交通" },
-      { time:"19:40", icon:"plane",     title:"福岡 → 桃園",           sub:"回家！", category:"交通" },
+      { time:"08:30", icon:"hotel",     title:"悠閒退房、寄行李",       sub:"", category:"住宿" },
+      { time:"09:00", icon:"store",     title:"柳橋連合市場(博多早市)", sub:"「博多的廚房」傳統早市，明太子/海鮮/玉子燒，居民日常", category:"景點", opt:false },
+      { time:"10:00", icon:"shopping-bag", title:"【崇慧補貨】博多站 ヨドバシ・伴手禮", sub:"ヨドバシカメラ博多(電器)＋明太子/通りもん，地點:博多站筑紫口", category:"購物", opt:false },
+      { time:"11:00", icon:"utensils",  title:"最後一餐：博多烏龍",     sub:"點我看 3 家推薦", category:"餐飲", dining:"d6_lunch", opt:false },
+      { time:"12:00", icon:"train",     title:"地鐵往福岡空港",        sub:"博多6分到(¥260)", category:"交通" },
+      { time:"14:00", icon:"plane",     title:"福岡 → 桃園",           sub:"回程多為中午~下午班，依你訂的班機", category:"交通" },
     ]
   }
 };
@@ -495,8 +550,8 @@ const questData = {
   d1_yatai:   { title:"屋台夜探",   icon:"lamp",       desc:"在中洲河畔找一攤屋台坐下來。", question:"你選了哪一種屋台？", options:["拉麵攤","關東煮","烤雞串","天婦羅"], reward:"屋台冒險家" },
   d2_mochi:   { title:"梅ヶ枝餅",   icon:"cookie",     desc:"在表參道吃一顆現烤梅ヶ枝餅。", question:"趁熱吃的感想？", options:["外酥內軟","紅豆剛好","買第二顆"], reward:"表參道美食家" },
   d2_omamori: { title:"求一個御守", icon:"torii-gate", desc:"在太宰府天満宮求一個御守。", question:"你求了哪一種？", options:["學業","戀愛","健康","事業"], reward:"太宰府參拜者" },
-  d3_swing:   { title:"海景鞦韆",   icon:"camera",     desc:"在糸島海邊拍一張跳起來的照片。", question:"今天海邊天氣？", options:["大晴天","多雲","起風","下雨也浪漫"], reward:"糸島攝影師" },
-  d3_kaedama: { title:"替玉挑戰",   icon:"utensils",   desc:"在一蘭喊一次「替玉お願いします」。", question:"你加了幾次麵？", options:["一次剛好","兩次","吃到扶牆"], reward:"替玉勇者" },
+  d3_boat:    { title:"水鄉船夫",   icon:"sailboat",   desc:"坐上木舟遊柳川護城河，聽船夫搖櫓唱歌、鑽過低矮石橋。", question:"船上最享受的是？", options:["搖櫓歌聲","水邊柳樹","鑽橋洞","曬太陽發呆"], reward:"柳川船客" },
+  d3_unagi:   { title:"鰻魚控",     icon:"utensils",   desc:"吃一碗柳川名物せいろ蒸し（蒸籠鰻魚飯）。", question:"這碗鰻魚給幾分？", options:["入口即化","醬香剛好","還想再一碗"], reward:"鰻魚せいろ達人" },
   d4_curry:   { title:"燒咖哩控",   icon:"utensils",   desc:"在門司港吃一份名物焼きカレー。", question:"起司牽絲程度？", options:["剛剛好","牽到天邊","再來一份"], reward:"門司港美食家" },
   d4_castle:  { title:"登城任務",   icon:"castle",     desc:"登上小倉城天守閣看風景。", question:"城上風景如何？", options:["視野遼闊","天氣正好","風有點大"], reward:"小倉城主" },
   d5_balloon: { title:"熱氣球獵人", icon:"sunrise",    desc:"看清晨約100顆熱氣球一齊升空。", question:"今天升空順利嗎？", options:["整齊起飛","天氣超好","風太大延後"], reward:"天空捕手" },
@@ -505,11 +560,90 @@ const questData = {
   d6_toorimon:{ title:"通りもん",   icon:"gift",       desc:"買一盒博多通りもん。", question:"你買了幾盒？", options:["一盒嘗鮮","三盒剛好","整箱扛回"], reward:"福岡銘菓收藏家" },
 };
 
+// —— 每餐 3 家推薦（點餐點會跳出，含地圖評價＋影片連結）——
+const diningOptions = {
+  d1_lunch: { title:"Day1 午餐 · 博多拉麵", tip:"落地第一碗豚骨", items:[
+    { name:"Shin-Shin 天神本店", note:"細麵豚骨、湯頭溫順好入口，觀光客最愛" },
+    { name:"博多一双 博多駅東本店", note:"濃厚泡系豚骨，泡沫綿密，排隊名店" },
+    { name:"元祖長浜屋 福岡", note:"平價長浜系，便宜快速、在地日常味" },
+  ]},
+  d1_dinner:{ title:"Day1 晚餐 · 中洲屋台", tip:"河畔夜市屋台，居民生活感", items:[
+    { name:"屋台 なんしようと 中洲", note:"菜色多、對觀光客友善的人氣屋台" },
+    { name:"屋台 KENZO 中洲", note:"法式風屋台，乾淨、餐點有質感" },
+    { name:"小金ちゃん 天神", note:"元祖『焼きラーメン』炒拉麵發源屋台" },
+  ]},
+  d2_mochi: { title:"Day2 · 梅ヶ枝餅", tip:"太宰府表參道現烤麻糬", items:[
+    { name:"かさの家 太宰府", note:"表參道老店，外酥內軟、內用可配茶" },
+    { name:"寺田屋 太宰府 梅ヶ枝餅", note:"現烤香氣足，排隊快、適合外帶" },
+    { name:"やす武 太宰府", note:"在地推薦老鋪，兼賣蕎麥麵定食" },
+  ]},
+  d2_lunch: { title:"Day2 午餐 · 太宰府／表參道", tip:"參拜後就近吃", items:[
+    { name:"梅の花 太宰府別邸", note:"豆腐湯葉懷石，環境清幽、適合長輩" },
+    { name:"かさの家 太宰府 母屋", note:"老店定食＋梅ヶ枝餅，一次滿足" },
+    { name:"スターバックス 太宰府天満宮表参道店", note:"木構名店輕食咖啡，想簡單吃就來" },
+  ]},
+  d2_dinner:{ title:"Day2 晚餐 · もつ鍋", tip:"福岡名物內臟鍋", items:[
+    { name:"もつ鍋 楽天地 天神本店", note:"蒜香山型高麗菜，招牌、氣氛熱鬧" },
+    { name:"もつ鍋 おおやま 博多駅", note:"味噌口味濃郁人氣，博多站內方便" },
+    { name:"もつ鍋 一藤 今泉本店", note:"老饕愛的醬油／味噌，湯頭講究" },
+  ]},
+  d3_lunch: { title:"Day3 午餐 · 柳川鰻魚せいろ蒸し", tip:"柳川名物蒸籠鰻魚飯", items:[
+    { name:"本吉屋 柳川", note:"創業1681年、せいろ蒸し元祖老店，醬香濃" },
+    { name:"若松屋 柳川", note:"河邊人氣名店，鰻魚肥美、觀光客最愛" },
+    { name:"御花 柳川（料亭）", note:"舊藩主宅邸內用餐，環境一流、氣氛佳" },
+  ]},
+  d3_dinner:{ title:"Day3 晚餐 · 博多拉麵", tip:"回市區吃一碗豚骨", items:[
+    { name:"一蘭 天神西通り店", note:"經典一人一格，回市區方便" },
+    { name:"一風堂 大名本店", note:"豚骨代表，赤丸／白丸必點" },
+    { name:"元祖赤のれん 節ちゃんラーメン 天神", note:"在地老店，湯頭清爽不死鹹" },
+  ]},
+  d4_lunch: { title:"Day4 午餐 · 門司港燒咖哩", tip:"門司港名物 焼きカレー", items:[
+    { name:"BEAR FRUITS 門司港本店", note:"門司港名物、藝人愛店，起司牽絲" },
+    { name:"王様のたまご 門司港", note:"蛋包燒咖哩，滑蛋濃郁" },
+    { name:"こがねむし 門司港", note:"老字號燒咖哩，在地口碑" },
+  ]},
+  d4_dinner:{ title:"Day4 晚餐 · 水炊き", tip:"福岡雞白湯鍋", items:[
+    { name:"水炊き 華味鳥 博多駅前店", note:"名店、雞湯濃醇，收尾雜炊必吃" },
+    { name:"博多水炊き とり田 博多本店", note:"米其林指南推薦，湯頭清雅" },
+    { name:"水たき 長野 博多", note:"百年老店，濁白雞湯經典味" },
+  ]},
+  d5_lunch: { title:"Day5 午餐 · 唐津", tip:"祭典日在地小吃", items:[
+    { name:"唐津バーガー（唐津）", note:"在地名物漢堡，海邊移動販賣人氣" },
+    { name:"竹屋 唐津（鰻魚）", note:"百年鰻魚老店，祭典日建議先訂" },
+    { name:"唐津くんち 祭典屋台", note:"くんち限定路邊攤，最有祭典氣氛" },
+  ]},
+  d6_lunch: { title:"Day6 午餐 · 博多烏龍", tip:"回程前輕鬆吃", items:[
+    { name:"資さんうどん 博多駅", note:"北九州國民烏龍，牛肉／牛蒡天必點" },
+    { name:"牧のうどん 博多デイトス店", note:"福岡軟麵烏龍，會吸湯的獨特口感" },
+    { name:"ウエスト 博多", note:"平價烏龍そば連鎖，快速方便" },
+  ]},
+};
+
+// —— 每個景點的介紹＋小探索（點景點會跳出，完成留一枚回憶徽章）——
+const spotData = {
+  "櫛田神社・東長寺": { icon:"landmark", desc:"博多總鎮守櫛田神社(博多祇園山笠起點)與福岡最古的東長寺、木造博多大佛，都在博多老街裡，免費、平緩好走。", question:"你最想留下的一刻？", options:["巨大飾山笠","博多大佛","古樹與銀杏","抽支好籤"], reward:"博多老街巡禮者" },
+  "Canal City 博多": { icon:"shopping-bag", desc:"運河穿過中庭的大型複合商場，整點有水舞噴泉秀，吃喝逛一次到位、下雨也不怕。", question:"你被哪個吸引？", options:["水舞噴泉","拉麵競技場","無印/GU","吹冷氣歇腿"], reward:"運河城打卡者" },
+  "太宰府天満宮": { icon:"torii-gate", desc:"祭祀學問之神菅原道真，御本殿與千年樟樹莊嚴，參道平緩好走(整修期間的臨時『假殿』也很美)。", question:"你為誰祈願？", options:["自己工作/學業","家人健康","孩子考試","戀愛順利"], reward:"太宰府參拜者" },
+  "表參道星巴克": { icon:"coffee", desc:"隈研吾以上千根木條交織設計的星巴克名店，是表參道地標，拍照很有味道。", question:"你的木構咖啡時光？", options:["外帶邊走邊喝","坐下歇腿","專心拍照","買隨行杯"], reward:"表參道文青" },
+  "柳川川下り 遊船": { icon:"sailboat", desc:"柳川是護城河環繞的水鄉，坐上木舟由船夫搖櫓帶你穿過老街與低矮石橋，約70分，很日本、很放鬆，長輩尤其適合。", question:"船上最享受？", options:["搖櫓歌聲","水邊柳樹","鑽橋洞","曬太陽發呆"], reward:"柳川船客" },
+  "御花・立花氏庭園": { icon:"landmark", desc:"舊柳川藩主立花家宅邸，含國指定名勝『松濤園』與洋館，古典優雅，可用餐喝茶。", question:"你想細看？", options:["松濤園景","洋館建築","史料館寶物","庭園喝茶"], reward:"柳川藩主客" },
+  "柳川老街散步": { icon:"store", desc:"水邊保留許多老鋪、和菓子、雜貨，步調緩慢，適合悠閒閒逛。", question:"想帶走什麼？", options:["和菓子","鰻魚仙貝","水鄉明信片","柳川手毬"], reward:"柳川散步者" },
+  "門司港復古地區": { icon:"building", desc:"保留大正・昭和洋風建築的懷舊港區，海邊平坦好走，適合悠閒散步。", question:"最打動你的畫面？", options:["紅磚洋樓","港邊夕陽","復古街燈","跨海藍翼橋"], reward:"門司港懷舊者" },
+  "關門海峽海邊散步": { icon:"waves", desc:"隔著海峽望向下關，可搭復古『潮風号』觀光列車或走海邊步道，微風徐徐。", question:"你想怎麼過海邊時光？", options:["坐潮風号","走海邊步道","看大船經過","吃海峽冰淇淋"], reward:"海峽漫步者" },
+  "小倉城(加碼)": { icon:"castle", desc:"小倉的地標城堡，天守閣可眺望市區，旁有庭園與神社，秋天氛圍佳。", question:"登城重點？", options:["天守閣眺望","庭園秋色","拍城景","蓋御城印"], reward:"小倉城主" },
+  "旦過市場(傳統市場)": { icon:"store", desc:"百年歷史的『小倉的廚房』，窄巷裡滿是魚舖、熟食、老店，最有庶民生活味。", question:"你想在市場吃？", options:["現炸天婦羅","關東煮","糠鯖魚","邊走邊吃"], reward:"旦過市場美食家" },
+  "(加碼)佐賀熱氣球 清晨升空": { icon:"sunrise", desc:"亞洲最大級熱氣球賽，清晨約百顆熱氣球一齊升空，天空被點滿，是此行最震撼的畫面(需早起)。", question:"升空瞬間你的反應？", options:["瘋狂拍照","看到出神","許個願","冷到發抖也值得"], reward:"天空捕手" },
+  "唐津くんち 曳山巡行": { icon:"party-popper", desc:"約400年歷史的秋季大祭，14台巨大漆金曳山在町內遊行，鑼鼓喧天，UNESCO無形文化遺產。", question:"你最愛哪一台曳山？", options:["赤獅子","青龍","飛龍","金獅子"], reward:"唐津くんち觀禮者" },
+  "唐津神社・舊唐津銀行": { icon:"landmark", desc:"唐津總鎮守唐津神社，旁邊的舊唐津銀行是辰野金吾(東京車站設計者)監修的洋館，古典優雅。", question:"你想細看？", options:["洋館紅磚立面","神社本殿","室內木裝","街角老鋪"], reward:"唐津古蹟迷" },
+  "柳橋連合市場(博多早市)": { icon:"store", desc:"人稱『博多的廚房』的傳統早市，明太子、海鮮、玉子燒、漬物一應俱全，滿滿在地日常。", question:"早市你想帶走？", options:["現做玉子燒","明太子","海鮮丼","醃漬小菜"], reward:"博多早市達人" },
+};
+
 // —— 出發前檢查清單 ——
 const checklistItems = [
   "護照（效期 6 個月以上）", "Visit Japan Web 已登錄、QR 已截圖", "eSIM / 網卡已買",
   "日圓現金（每人 3～5 萬）", "國際信用卡（Visa/Master）", "常備藥、暈車藥",
-  "轉接頭（日本插座與台灣同，多為兩孔可不用）", "行李箱有空間裝伴手禮", "保暖外套（3月福岡早晚冷）"
+  "轉接頭（日本插座與台灣同，多為兩孔可不用）", "行李箱有空間裝伴手禮",
+  "薄外套＋針織（早晚僅10~12°C，洋蔥式穿搭）", "摺疊傘或薄防水外套（秋雨備用）", "保濕護唇（晚秋較乾）"
 ];
 
 // —— 保命日語 ——
@@ -616,6 +750,30 @@ const festivals = [
   },
 ];
 
+// —— 備選口袋名單（沒排進行程的九州必去＋傳統美食）——
+const altData = [
+  { cat:"市區・順路景點", items:[
+    { name:"大濠公園・福岡城跡", note:"市中心大公園＋城跡，散步賞秋、天守台看夕陽，長輩超舒服" },
+    { name:"福岡塔・海濱百道", note:"海濱地標，展望台看夜景" },
+    { name:"宮地嶽神社 光之道", note:"參道對準夕陽的絕景(季節限定，需查日期)" },
+    { name:"能古島 海島公園", note:"渡輪10分的花海小島，悠閒半日" },
+  ]},
+  { cat:"溫泉・近郊(想放慢可換一天)", items:[
+    { name:"由布院 溫泉 金鱗湖", note:"人氣溫泉小鎮，湯之坪街道＋泡湯，最療癒" },
+    { name:"別府 地獄溫泉", note:"七彩溫泉奇景＋泡湯，經典九州溫泉鄉" },
+    { name:"秋月 城下町", note:"『筑前小京都』，晚秋紅葉、古街寧靜" },
+    { name:"太宰府 竈門神社", note:"結緣神社＋紅葉名所，可接太宰府那天" },
+  ]},
+  { cat:"傳統美食・老味道", items:[
+    { name:"ごまさば 芝麻鯖魚", note:"福岡限定芝麻醬生鯖魚，居酒屋必點" },
+    { name:"博多鐵鍋餃子", note:"一口煎餃，鉄なべ／テムジン名店" },
+    { name:"博多焼き鳥 豚バラ", note:"必吃五花肉串，配高麗菜" },
+    { name:"元祖博多めんたい重", note:"整條明太子蓋飯，豪邁下飯" },
+    { name:"おきうと", note:"博多傳統海藻凍，清爽早餐小菜" },
+    { name:"如水庵 筑紫餅", note:"黃豆粉麻糬，經典和菓子伴手禮" },
+  ]},
+];
+
 /* =================================================================
    ⑤ Firebase 設定：把你自己的金鑰貼進來（教學文件 STEP 5）
    還沒設定前，分帳頁會顯示教學卡、其他功能照常運作
@@ -703,20 +861,34 @@ function renderDay(){
     </div>
     <div class="relative pl-8">
       <div class="timeline-line absolute left-3 top-2 bottom-2 w-0.5"></div>
-      ${d.activities.map(a=>`
+      ${d.activities.map(a=>{
+        const isSpot = (a.category==='景點') && spotData[a.title];
+        const clickAttr = a.dining ? `onclick="openDining('${a.dining}')"`
+                        : (isSpot ? `onclick="openSpot('${a.title.replace(/'/g,"\\'")}')"` : '');
+        const done = isSpot && getQuestState()[a.title];
+        const optBadge = a.opt===true
+          ? '<span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">可省略加碼</span>'
+          : (a.opt===false ? '<span class="text-[10px] bg-brand/10 text-brandDark px-2 py-0.5 rounded-full">順路輕鬆玩</span>' : '');
+        const hint = a.dining ? '<span class="text-[10px] text-brand font-semibold">🍽 3家推薦 ›</span>'
+                   : (isSpot ? `<span class="text-[10px] text-brand font-semibold">${done?'✓ 已留下回憶':'✦ 小探索 ›'}</span>` : '');
+        return `
         <div class="relative mb-4">
           <div class="absolute -left-8 top-0 w-6 h-6 rounded-full bg-brand/15 flex items-center justify-center">
             <i data-lucide="${a.icon}" class="w-3.5 h-3.5 text-brand"></i>
           </div>
-          <div class="bg-white rounded-2xl p-3 shadow-sm">
-            <div class="flex justify-between items-center">
+          <div class="bg-white rounded-2xl p-3 shadow-sm ${(a.dining||isSpot)?'cursor-pointer active:scale-[0.99] transition':''}" ${clickAttr}>
+            <div class="flex justify-between items-center gap-2">
               <span class="font-bold text-sm">${a.title}</span>
-              <span class="text-xs text-brand font-semibold">${a.time}</span>
+              <span class="text-xs text-brand font-semibold shrink-0">${a.time}</span>
             </div>
             ${a.sub?`<p class="text-xs text-gray-500 mt-1">${a.sub}</p>`:''}
-            <span class="inline-block text-[10px] bg-cream text-brandDark px-2 py-0.5 rounded-full mt-2">${a.category}</span>
+            <div class="flex items-center gap-1.5 mt-2 flex-wrap">
+              <span class="text-[10px] bg-cream text-brandDark px-2 py-0.5 rounded-full">${a.category}</span>
+              ${optBadge}${hint}
+            </div>
           </div>
-        </div>`).join('')}
+        </div>`;
+      }).join('')}
     </div>`;
   lucide.createIcons();
 }
@@ -742,14 +914,54 @@ function openQuest(key){
   lucide.createIcons();
 }
 function closeQuest(){ document.getElementById('quest-modal').classList.add('hidden'); }
+// 景點小探索：跟 highlight 小探索共用同一個 modal，只是資料來自 spotData
+function openSpot(key){
+  const s = spotData[key]; if(!s) return;
+  activeQuestKey = key;
+  document.getElementById('quest-title').textContent = key.replace(/^\(加碼\)/,'');
+  document.getElementById('quest-desc').textContent = s.desc;
+  document.getElementById('quest-question').textContent = s.question;
+  document.getElementById('quest-reward').textContent = s.reward;
+  document.getElementById('quest-icon').setAttribute('data-lucide', s.icon);
+  const done = getQuestState()[key];
+  document.getElementById('quest-options').innerHTML = s.options.map((o,i)=>`
+    <button onclick="completeQuest(${i})"
+      class="w-full text-left border rounded-xl px-3 py-2 text-sm ${done&&done.selectedOption===i?'bg-brand text-white border-brand':'bg-white'}">
+      ${o}</button>`).join('');
+  document.getElementById('quest-modal').classList.remove('hidden');
+  lucide.createIcons();
+}
 function completeQuest(optionIndex){
   const state = getQuestState();
   const first = !state[activeQuestKey];
   state[activeQuestKey] = { completedAt:new Date().toISOString(), selectedOption:optionIndex };
   localStorage.setItem(QUEST_STORAGE_KEY, JSON.stringify(state));
   closeQuest(); renderDay();
-  showToast(first ? '🏅 獲得徽章：'+questData[activeQuestKey].reward : '已更新');
+  const reward = ((questData[activeQuestKey]||spotData[activeQuestKey]||{}).reward) || '回憶';
+  showToast(first ? '🏅 獲得徽章：'+reward : '已更新');
 }
+// 餐點 3 選 modal
+function openDining(key){
+  const d = diningOptions[key]; if(!d) return;
+  document.getElementById('dining-title').textContent = d.title;
+  document.getElementById('dining-tip').textContent = d.tip||'';
+  document.getElementById('dining-list').innerHTML = d.items.map(o=>{
+    const q = encodeURIComponent(o.name);
+    const map = 'https://www.google.com/maps/search/'+q;
+    const yt  = 'https://www.youtube.com/results?search_query='+q;
+    return `<div class="bg-white rounded-2xl p-3 shadow-sm">
+      <p class="font-bold text-sm">${o.name}</p>
+      <p class="text-xs text-gray-500 mt-1">${o.note}</p>
+      <div class="flex gap-2 mt-2">
+        <a href="${map}" target="_blank" class="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full bg-brand/10 text-brandDark"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>地圖・評價</a>
+        <a href="${yt}" target="_blank" class="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full bg-red-50 text-red-600"><i data-lucide="youtube" class="w-3.5 h-3.5"></i>影片</a>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('dining-modal').classList.remove('hidden');
+  lucide.createIcons();
+}
+function closeDining(){ document.getElementById('dining-modal').classList.add('hidden'); }
 function resetQuestState(){
   if(confirm('確定要重置所有小探索的紀錄嗎？')){
     localStorage.removeItem(QUEST_STORAGE_KEY); renderDay(); showToast('小探索已重置！');
@@ -779,6 +991,28 @@ function makeCheckList(containerId, storageKey, groups){
     Object.assign(state, s); render();
   };
   render();
+}
+
+/* ---------- 備選口袋名單 ---------- */
+function renderAlt(){
+  document.getElementById('alt-container').innerHTML = altData.map(g=>`
+    <div>
+      <p class="font-bold text-brandDark mb-2">${g.cat}</p>
+      <div class="space-y-2">
+        ${g.items.map(o=>{
+          const q = encodeURIComponent(o.name);
+          return `<div class="bg-white rounded-2xl p-3 shadow-sm">
+            <p class="font-bold text-sm">${o.name}</p>
+            <p class="text-xs text-gray-500 mt-1">${o.note}</p>
+            <div class="flex gap-2 mt-2">
+              <a href="https://www.google.com/maps/search/${q}" target="_blank" class="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full bg-brand/10 text-brandDark"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>地圖・評價</a>
+              <a href="https://www.youtube.com/results?search_query=${q}" target="_blank" class="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full bg-red-50 text-red-600"><i data-lucide="youtube" class="w-3.5 h-3.5"></i>影片</a>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+  lucide.createIcons();
 }
 
 /* ---------- 九州慶典 ---------- */
@@ -970,6 +1204,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   makeCheckList('shopping-container', 'fukuokaShopping', shoppingList);
   renderPhrases();
   renderFestivals();
+  renderAlt();
   initAccounting();
   lucide.createIcons();
 });
