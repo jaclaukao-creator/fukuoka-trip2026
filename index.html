@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<!-- 手機優先：這一行讓網頁在手機上以正確寬度顯示 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第一次去福岡 好福氣旅行團</title>
+
+<!-- ① Tailwind CSS：用 class 就能排版，不用自己寫一堆 CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  // 自訂主題色（土陶暖色系，跟原版曼谷手冊同一個氣質）
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand:  '#C87D55',   // 主色（土陶橘）
+          brandDark: '#A65D3A',
+          cream:  '#FBF7F2',   // 背景奶油色
+          ink:    '#3A2E28'    // 深棕文字
+        },
+        fontFamily: {
+          serif: ['"Noto Serif TC"', '"Playfair Display"', 'serif'],
+          sans:  ['"Noto Sans TC"', '"Plus Jakarta Sans"', 'sans-serif']
+        }
+      }
+    }
+  }
+</script>
+
+<!-- ② Google 字型 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700;900&family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@500;700&display=swap" rel="stylesheet">
+
+<!-- ③ Lucide 圖示（<i data-lucide="plane"></i> 就能放一個圖示） -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<!-- ④ Firebase（全團即時共用記帳用）。用第 8 版 compat，寫法最單純 -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<style>
+  body{ background:#FBF7F2; color:#3A2E28; }
+  .font-serif{ font-family:'Noto Serif TC','Playfair Display',serif; }
+
+  /* 上方分頁：被選到的那顆底下出現一條橫線 */
+  .top-nav-item{ position:relative; color:#8a7c72; transition:.2s; }
+  .top-nav-item.active{ color:#A65D3A; font-weight:700; }
+  .top-nav-item.active::after{
+    content:''; position:absolute; left:12px; right:12px; bottom:-2px;
+    height:3px; border-radius:3px; background:#C87D55;
+  }
+  /* 主要區塊：一次只顯示一個（切分頁時切換） */
+  .main-view{ display:none; }
+  .main-view.active{ display:block; }
+
+  /* 時間軸左邊那條線 */
+  .timeline-line{ background:linear-gradient(#E7D3C5, #E7D3C5); }
+
+  /* 小探索徽章：完成後亮起來 */
+  .quest-card.done{ background:#F4E9DF; border-color:#C87D55; }
+
+  /* Toast 小提示 */
+  #toast{ transition:opacity .3s, transform .3s; }
+  .no-scrollbar::-webkit-scrollbar{ display:none; }
+  .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
+</style>
+</head>
+
+<body class="font-sans pb-24">
+
+<!-- ===================== 上方固定分頁列 ===================== -->
+<header class="sticky top-0 z-40 bg-cream/95 backdrop-blur border-b border-[#EADFD4]">
+  <div class="max-w-xl mx-auto px-2">
+    <nav class="flex justify-between text-sm overflow-x-auto no-scrollbar">
+      <button id="top-tab-overview"   class="top-nav-item active px-3 py-3 whitespace-nowrap" onclick="switchMainTab('overview')">總覽</button>
+      <button id="top-tab-itinerary"  class="top-nav-item px-3 py-3 whitespace-nowrap" onclick="switchMainTab('itinerary')">行程</button>
+      <button id="top-tab-japanese"   class="top-nav-item px-3 py-3 whitespace-nowrap" onclick="switchMainTab('japanese')">保命日語</button>
+      <button id="top-tab-shopping"   class="top-nav-item px-3 py-3 whitespace-nowrap" onclick="switchMainTab('shopping')">必買</button>
+      <button id="top-tab-accounting" class="top-nav-item px-3 py-3 whitespace-nowrap" onclick="switchMainTab('accounting')">分帳</button>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-xl mx-auto px-4">
+
+<!-- ============================================================= -->
+<!-- 分頁 1：總覽                                                    -->
+<!-- ============================================================= -->
+<section id="view-overview" class="main-view active">
+
+  <!-- Hero 主視覺 -->
+  <div class="relative rounded-3xl overflow-hidden mt-4 shadow-lg">
+    <img src="https://images.unsplash.com/photo-1590559899731-a382839e5549?q=80&w=1200&auto=format&fit=crop"
+         alt="福岡" class="w-full h-56 object-cover">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+    <div class="absolute bottom-0 p-5 text-white">
+      <p class="text-xs tracking-widest opacity-80">FUKUOKA · JAPAN</p>
+      <h1 class="font-serif text-3xl font-bold leading-tight">第一次去福岡<br>好福氣旅行團</h1>
+    </div>
+  </div>
+
+  <!-- 旅程資訊卡 -->
+  <div class="grid grid-cols-3 gap-3 mt-4">
+    <div class="bg-white rounded-2xl p-3 text-center shadow-sm">
+      <p class="text-2xl font-bold text-brand">4</p><p class="text-xs text-gray-500">天 3 夜</p>
+    </div>
+    <div class="bg-white rounded-2xl p-3 text-center shadow-sm">
+      <p class="text-2xl font-bold text-brand">12</p><p class="text-xs text-gray-500">位團員</p>
+    </div>
+    <div class="bg-white rounded-2xl p-3 text-center shadow-sm">
+      <p class="text-2xl font-bold text-brand">約¥5萬</p><p class="text-xs text-gray-500">每人預算</p>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl p-4 mt-3 shadow-sm">
+    <div class="flex items-center gap-2 text-sm">
+      <i data-lucide="calendar" class="w-4 h-4 text-brand"></i>
+      <span>2026 / 03 / 12（四）－ 03 / 15（日）</span>
+    </div>
+    <div class="flex items-center gap-2 text-sm mt-2">
+      <i data-lucide="hotel" class="w-4 h-4 text-brand"></i>
+      <span>飯店：博多站前 ○○ Hotel（近博多站，可放行李）</span>
+    </div>
+  </div>
+
+  <!-- 出發前檢查清單（勾選狀態存在瀏覽器裡） -->
+  <h2 class="font-serif text-xl font-bold mt-6 mb-2 flex items-center gap-2">
+    <i data-lucide="check-check" class="w-5 h-5 text-brand"></i>出發前檢查清單
+  </h2>
+  <div id="checklist" class="bg-white rounded-2xl p-2 shadow-sm"></div>
+
+  <!-- 交通指南 -->
+  <h2 class="font-serif text-xl font-bold mt-6 mb-2 flex items-center gap-2">
+    <i data-lucide="train-front" class="w-5 h-5 text-brand"></i>交通懶人包
+  </h2>
+  <div class="bg-white rounded-2xl p-4 shadow-sm space-y-3 text-sm leading-relaxed">
+    <p><b class="text-brandDark">IC 卡：</b>福岡在地卡是 SUGOCA / nimoca / はやかけん；台灣帶去的 Suica、ICOCA 也能直接刷地鐵、公車。到便利商店買也能用。</p>
+    <p><b class="text-brandDark">機場進市區：</b>福岡空港站搭「地下鐵空港線」到<b>博多站約 6 分鐘（¥260）</b>、到<b>天神約 11 分鐘</b>。是全日本少見「機場超近市區」的城市。</p>
+    <p><b class="text-brandDark">市區移動：</b>地下鐵 + 西鐵巴士為主。整天要跑很多點，可買<b>地下鐵一日券 ¥640</b>。</p>
+    <p><b class="text-brandDark">去太宰府：</b>西鐵天神站搭大牟田線到<b>二日市站換太宰府線</b>，全程約 30 分鐘。可買「太宰府散策きっぷ」套票較划算。</p>
+    <p><b class="text-brandDark">叫車：</b>用 <b>GO</b> App（日本版 Uber 類）比路邊招車方便。</p>
+  </div>
+
+  <!-- 付款方式 -->
+  <h2 class="font-serif text-xl font-bold mt-6 mb-2 flex items-center gap-2">
+    <i data-lucide="wallet" class="w-5 h-5 text-brand"></i>付款方式
+  </h2>
+  <div class="bg-white rounded-2xl p-4 shadow-sm text-sm leading-relaxed space-y-2">
+    <p>大城市刷卡、電子支付普及，但<b>屋台、小店、神社周邊常常只收現金</b>，建議每人先換 3～5 萬日圓現金。</p>
+    <p>行動支付：PayPay 最普及（需日本帳號較難用），觀光客最穩的還是<b>現金＋國際信用卡（Visa / Master）</b>。</p>
+  </div>
+
+  <!-- 緊急資訊 -->
+  <h2 class="font-serif text-xl font-bold mt-6 mb-2 flex items-center gap-2">
+    <i data-lucide="siren" class="w-5 h-5 text-brand"></i>緊急資訊
+  </h2>
+  <div class="bg-white rounded-2xl p-4 shadow-sm text-sm space-y-2">
+    <p><b>航班：</b>桃園 TPE ⇄ 福岡 FUK（○○航空，去 08:20 / 回 19:40）</p>
+    <p><b>報警：</b>110（警察）／ 119（火災・救護車）</p>
+    <p><b>駐福岡辦事處（台灣）：</b>+81-92-734-2810</p>
+    <p><b>領隊：</b>小美 +886-9xx-xxx-xxx</p>
+    <a href="https://maps.google.com/maps?q=博多駅&output=embed" class="hidden"></a>
+    <a href="https://www.google.com/maps/search/博多站前飯店" target="_blank"
+       class="inline-flex items-center gap-1 text-brand font-semibold mt-1">
+       <i data-lucide="map-pin" class="w-4 h-4"></i>飯店地圖導航
+    </a>
+  </div>
+
+  <!-- 實用連結 -->
+  <h2 class="font-serif text-xl font-bold mt-6 mb-2 flex items-center gap-2">
+    <i data-lucide="link" class="w-5 h-5 text-brand"></i>實用連結
+  </h2>
+  <div class="grid grid-cols-2 gap-3">
+    <a href="https://www.vjw.digital.go.jp/" target="_blank" class="bg-white rounded-2xl p-4 shadow-sm text-sm font-semibold flex items-center gap-2">
+      <i data-lucide="qr-code" class="w-5 h-5 text-brand"></i>Visit Japan Web 入境登錄
+    </a>
+    <a href="https://www.google.com/search?q=福岡+eSIM" target="_blank" class="bg-white rounded-2xl p-4 shadow-sm text-sm font-semibold flex items-center gap-2">
+      <i data-lucide="wifi" class="w-5 h-5 text-brand"></i>eSIM 上網卡
+    </a>
+    <a href="https://subway.city.fukuoka.lg.jp/" target="_blank" class="bg-white rounded-2xl p-4 shadow-sm text-sm font-semibold flex items-center gap-2">
+      <i data-lucide="train" class="w-5 h-5 text-brand"></i>福岡地下鐵官網
+    </a>
+    <a href="https://www.google.com/maps/place/Fukuoka" target="_blank" class="bg-white rounded-2xl p-4 shadow-sm text-sm font-semibold flex items-center gap-2">
+      <i data-lucide="map" class="w-5 h-5 text-brand"></i>福岡地圖
+    </a>
+  </div>
+
+  <p class="text-center text-xs text-gray-400 mt-8">📸 建議把這頁存成書籤，離線時截圖也看得到重點</p>
+</section>
+
+<!-- ============================================================= -->
+<!-- 分頁 2：行程                                                    -->
+<!-- ============================================================= -->
+<section id="view-itinerary" class="main-view">
+
+  <!-- 每一天的小分頁（1～4） -->
+  <div id="day-tabs" class="flex gap-2 mt-4 overflow-x-auto no-scrollbar"></div>
+
+  <!-- 當天地圖 -->
+  <div class="rounded-2xl overflow-hidden shadow-sm mt-3 border border-[#EADFD4]">
+    <iframe id="day-map" class="w-full h-48" style="border:0" loading="lazy"></iframe>
+  </div>
+
+  <!-- 當天亮點 -->
+  <div id="day-highlights" class="grid grid-cols-2 gap-3 mt-3"></div>
+
+  <!-- 當天時間軸 -->
+  <div id="day-timeline" class="mt-4"></div>
+
+  <!-- 小探索重置鈕 -->
+  <div class="text-center mt-6">
+    <button onclick="resetQuestState()" class="text-xs text-gray-400 underline">重置所有小探索紀錄</button>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 分頁 3：保命日語                                                -->
+<!-- ============================================================= -->
+<section id="view-japanese" class="main-view">
+  <h2 class="font-serif text-2xl font-bold mt-5 mb-1">保命日語 🍶</h2>
+  <p class="text-sm text-gray-500 mb-4">點一下就能大聲唸出來的關鍵句</p>
+  <div id="phrase-container" class="space-y-5"></div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 分頁 4：必買                                                    -->
+<!-- ============================================================= -->
+<section id="view-shopping" class="main-view">
+  <h2 class="font-serif text-2xl font-bold mt-5 mb-1">必買清單 🛍️</h2>
+  <p class="text-sm text-gray-500 mb-4">買到就打勾（紀錄會存在這支手機）</p>
+  <div id="shopping-container" class="space-y-5"></div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 分頁 5：分帳（Firebase 即時共用）                               -->
+<!-- ============================================================= -->
+<section id="view-accounting" class="main-view">
+  <h2 class="font-serif text-2xl font-bold mt-5 mb-1">團體分帳 💴</h2>
+  <p class="text-sm text-gray-500 mb-4">全團即時共用，誰付了什麼、最後誰要還誰，自動算</p>
+
+  <!-- 若尚未設定 Firebase，顯示教學卡（設定好就會自動消失） -->
+  <div id="firebase-setup" class="hidden bg-amber-50 border border-amber-300 rounded-2xl p-4 text-sm leading-relaxed">
+    <p class="font-bold text-amber-800 mb-2">⚠️ 分帳功能尚未啟用</p>
+    <p>這個功能需要一個免費的 Firebase 後端。請看附上的教學文件「STEP 5：設定 Firebase」，把你的設定金鑰貼進 HTML 檔最下方的 <code class="bg-white px-1 rounded">firebaseConfig</code>，存檔後這張卡就會消失、分帳就會啟用。</p>
+  </div>
+
+  <!-- 匯率設定 -->
+  <div id="acc-body" class="hidden">
+    <div class="bg-white rounded-2xl p-4 shadow-sm flex items-center gap-2 text-sm">
+      <span>匯率　1 JPY =</span>
+      <input id="acc-rate-input" type="number" step="0.001" value="0.215"
+             onchange="updateRate()" class="w-20 border rounded-lg px-2 py-1 text-center">
+      <span>TWD</span>
+    </div>
+
+    <!-- 新增一筆花費 -->
+    <div class="bg-white rounded-2xl p-4 shadow-sm mt-3 space-y-3">
+      <input id="exp-title" placeholder="花費項目（例：一蘭拉麵）" class="w-full border rounded-lg px-3 py-2 text-sm">
+      <div class="flex gap-2">
+        <input id="exp-amount" type="number" placeholder="金額" class="flex-1 border rounded-lg px-3 py-2 text-sm">
+        <select id="exp-currency" class="border rounded-lg px-2 py-2 text-sm">
+          <option value="JPY">JPY 日圓</option>
+          <option value="TWD">TWD 台幣</option>
+        </select>
+      </div>
+      <div class="flex gap-2">
+        <select id="exp-payer" class="flex-1 border rounded-lg px-2 py-2 text-sm"></select>
+        <select id="exp-category" class="border rounded-lg px-2 py-2 text-sm">
+          <option>🍜 餐飲</option><option>🚃 交通</option><option>🛍️ 購物</option>
+          <option>🎫 景點</option><option>💊 其他</option>
+        </select>
+      </div>
+      <div>
+        <p class="text-xs text-gray-500 mb-1">這筆要分給誰（預設全選）：</p>
+        <div id="exp-beneficiaries" class="flex flex-wrap gap-2"></div>
+      </div>
+      <button onclick="addExpense()" class="w-full bg-brand text-white rounded-lg py-2 font-bold">＋ 記一筆</button>
+    </div>
+
+    <!-- 結算：誰要還誰 -->
+    <h3 class="font-serif text-lg font-bold mt-6 mb-2">💰 結算（誰還誰）</h3>
+    <div id="settlement-list" class="space-y-2"></div>
+
+    <!-- 每人結餘 -->
+    <h3 class="font-serif text-lg font-bold mt-6 mb-2">👥 每人結餘</h3>
+    <div id="members-balance-container" class="grid grid-cols-2 gap-2"></div>
+
+    <!-- 所有花費明細 -->
+    <h3 class="font-serif text-lg font-bold mt-6 mb-2">🧾 花費明細</h3>
+    <div id="expense-list-container" class="space-y-2"></div>
+  </div>
+</section>
+
+</main>
+
+<!-- 小探索 Modal -->
+<div id="quest-modal" class="hidden fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-4">
+  <div class="bg-cream rounded-3xl p-6 w-full max-w-md">
+    <div class="flex justify-between items-start">
+      <div class="flex items-center gap-2">
+        <div class="w-10 h-10 rounded-full bg-brand/15 flex items-center justify-center">
+          <i id="quest-icon" data-lucide="sparkles" class="w-5 h-5 text-brand"></i>
+        </div>
+        <h3 id="quest-title" class="font-serif text-xl font-bold"></h3>
+      </div>
+      <button onclick="closeQuest()"><i data-lucide="x" class="w-5 h-5 text-gray-400"></i></button>
+    </div>
+    <p id="quest-desc" class="text-sm text-gray-600 mt-3"></p>
+    <p id="quest-question" class="font-bold mt-4 mb-2"></p>
+    <div id="quest-options" class="space-y-2"></div>
+    <p class="text-xs text-brand mt-4 flex items-center gap-1">
+      <i data-lucide="award" class="w-4 h-4"></i>完成後可獲得徽章：<span id="quest-reward" class="font-bold"></span>
+    </p>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-ink text-white text-sm px-4 py-2 rounded-full opacity-0 pointer-events-none z-50"></div>
+
+<script>
+/* =================================================================
+   資料區：改行程只要改這裡
+   ================================================================= */
+
+// —— 團員名單（分帳、探索都會用到）——
+const MEMBERS = ['小美','阿宏','Ellen','阿哲','小婷','大衛','君君','阿凱','Nina','小福','阿翔','阿寬'];
+
+// —— 逐日行程 ——
+// 每一天：dateStr 日期、title 標題、desc 一句話、mapQuery 地圖搜尋字、
+//        highlights 亮點卡、activities 時間軸（time/icon/title/sub/category）
+const tripDaysData = {
+  1: {
+    dateStr: "03.12 (四)",
+    title: "抵達 · 博多初體驗 · 屋台聚餐",
+    desc: "落地福岡 → 放行李 → Canal City 逛街 → 中洲屋台開吃",
+    mapQuery: "Canal City Hakata",
+    highlights: [
+      { title: "博多拉麵", sub: "落地第一碗豚骨", key: "d1_ramen" },
+      { title: "中洲屋台", sub: "河畔夜市小攤", key: "d1_yatai" },
+    ],
+    activities: [
+      { time:"08:20", icon:"plane",     title:"桃園 → 福岡 FUK",     sub:"約 2 小時，落地約 11:40", category:"交通" },
+      { time:"12:30", icon:"train-front", title:"地下鐵進市區",       sub:"空港線 6 分到博多站（¥260）", category:"交通" },
+      { time:"13:00", icon:"hotel",     title:"飯店寄放行李",          sub:"太早不能 check-in，先寄行李", category:"住宿" },
+      { time:"13:30", icon:"utensils",  title:"午餐：Shin-Shin 拉麵", sub:"天神本店 · 細麵豚骨", category:"餐飲" },
+      { time:"15:00", icon:"shopping-bag", title:"Canal City 博多",   sub:"運河城，整點有噴泉秀", category:"景點" },
+      { time:"18:30", icon:"lamp",      title:"中洲屋台晚餐",          sub:"豚骨拉麵／關東煮／烤雞串", category:"餐飲" },
+    ]
+  },
+  2: {
+    dateStr: "03.13 (五)",
+    title: "太宰府 · 表參道 · 天神逛街",
+    desc: "太宰府天満宮參拜 → 梅ヶ枝餅 → 表參道星巴克 → 天神買到手軟",
+    mapQuery: "太宰府天満宮",
+    highlights: [
+      { title: "梅ヶ枝餅", sub: "現烤紅豆麻糬", key: "d2_mochi" },
+      { title: "御守", sub: "學業・戀愛都靈", key: "d2_omamori" },
+    ],
+    activities: [
+      { time:"09:00", icon:"train",     title:"西鐵前往太宰府",        sub:"天神→二日市換車，約 30 分", category:"交通" },
+      { time:"10:00", icon:"torii-gate",title:"太宰府天満宮",          sub:"學問之神，求學業", category:"景點" },
+      { time:"11:00", icon:"coffee",    title:"表參道 · 星巴克",        sub:"隈研吾設計的木構名店", category:"景點" },
+      { time:"12:30", icon:"utensils",  title:"午餐：竈門神社周邊",     sub:"或回天神吃 もつ鍋", category:"餐飲" },
+      { time:"15:00", icon:"shopping-bag", title:"天神地下街",         sub:"迷宮般的地下購物街", category:"購物" },
+      { time:"18:30", icon:"soup",      title:"晚餐：もつ鍋 · 樂天地", sub:"福岡名物內臟鍋", category:"餐飲" },
+    ]
+  },
+  3: {
+    dateStr: "03.14 (六)",
+    title: "糸島一日遊 · 海景咖啡",
+    desc: "夫婦岩 → 海邊鞦韆 → 網美咖啡 → 晚上一蘭總本店",
+    mapQuery: "糸島 夫婦岩 二見ヶ浦",
+    highlights: [
+      { title: "海景鞦韆", sub: "IG 打卡點", key: "d3_swing" },
+      { title: "替玉", sub: "拉麵加麵挑戰", key: "d3_kaedama" },
+    ],
+    activities: [
+      { time:"09:30", icon:"car",       title:"包車／巴士前往糸島",     sub:"郊區景點分散，包車最順", category:"交通" },
+      { time:"10:30", icon:"waves",     title:"櫻井二見ヶ浦 夫婦岩",    sub:"海上鳥居與夫婦岩", category:"景點" },
+      { time:"12:00", icon:"utensils",  title:"海邊午餐",              sub:"牡蠣小屋或海景餐廳", category:"餐飲" },
+      { time:"14:00", icon:"camera",    title:"糸島網美咖啡巡禮",       sub:"白色鞦韆・天使翅膀牆", category:"景點" },
+      { time:"18:00", icon:"train-front", title:"回博多市區",          sub:"", category:"交通" },
+      { time:"19:30", icon:"utensils",  title:"晚餐：一蘭 總本店",     sub:"發源地本店，可挑戰替玉", category:"餐飲" },
+    ]
+  },
+  4: {
+    dateStr: "03.15 (日)",
+    title: "採買伴手禮 · 賦歸",
+    desc: "博多站掃貨明太子 → JR博多城頂樓 → 機場快閃 → 回家",
+    mapQuery: "JR博多シティ",
+    highlights: [
+      { title: "明太子", sub: "福さ屋・やまや", key: "d4_mentaiko" },
+      { title: "通りもん", sub: "福岡必買銘菓", key: "d4_toorimon" },
+    ],
+    activities: [
+      { time:"09:00", icon:"hotel",     title:"退房・寄行李",          sub:"", category:"住宿" },
+      { time:"09:30", icon:"shopping-bag", title:"博多站・阪急・東急手創", sub:"明太子・通りもん・藥妝", category:"購物" },
+      { time:"11:30", icon:"building",  title:"JR博多城 頂樓庭園",      sub:"つばめの杜ひろば 眺望", category:"景點" },
+      { time:"13:00", icon:"utensils",  title:"最後一餐：資さんうどん", sub:"福岡在地烏龍麵", category:"餐飲" },
+      { time:"16:00", icon:"train",     title:"地下鐵前往福岡空港",     sub:"博多站 6 分鐘到", category:"交通" },
+      { time:"19:40", icon:"plane",     title:"福岡 → 桃園",           sub:"回家！", category:"交通" },
+    ]
+  }
+};
+
+// —— 小探索任務（遊戲化徽章）——
+// key 要跟上面 highlights 的 key 對得起來
+const questData = {
+  d1_ramen:   { title:"豚骨初體驗", icon:"utensils",   desc:"落地第一碗拉麵，感受福岡濃郁豚骨湯頭。", question:"你的第一碗給幾分？", options:["清爽入門","濃到升天","還想再一碗"], reward:"博多拉麵新手" },
+  d1_yatai:   { title:"屋台夜探",   icon:"lamp",       desc:"在中洲河畔找一攤屋台坐下來。", question:"你選了哪一種屋台？", options:["拉麵攤","關東煮","烤雞串","天婦羅"], reward:"屋台冒險家" },
+  d2_mochi:   { title:"梅ヶ枝餅",   icon:"cookie",     desc:"在表參道吃一顆現烤梅ヶ枝餅。", question:"趁熱吃的感想？", options:["外酥內軟","紅豆剛好","買第二顆"], reward:"表參道美食家" },
+  d2_omamori: { title:"求一個御守", icon:"torii-gate", desc:"在太宰府天満宮求一個御守。", question:"你求了哪一種？", options:["學業","戀愛","健康","事業"], reward:"太宰府參拜者" },
+  d3_swing:   { title:"海景鞦韆",   icon:"camera",     desc:"在糸島海邊拍一張跳起來的照片。", question:"今天海邊天氣？", options:["大晴天","多雲","起風","下雨也浪漫"], reward:"糸島攝影師" },
+  d3_kaedama: { title:"替玉挑戰",   icon:"utensils",   desc:"在一蘭喊一次「替玉お願いします」。", question:"你加了幾次麵？", options:["一次剛好","兩次","吃到扶牆"], reward:"替玉勇者" },
+  d4_mentaiko:{ title:"明太子獵人", icon:"shopping-bag", desc:"買一盒明太子當伴手禮。", question:"你買給誰？", options:["自己","家人","同事","全都要"], reward:"伴手禮達人" },
+  d4_toorimon:{ title:"通りもん",   icon:"gift",       desc:"買一盒博多通りもん。", question:"你買了幾盒？", options:["一盒嘗鮮","三盒剛好","整箱扛回"], reward:"福岡銘菓收藏家" },
+};
+
+// —— 出發前檢查清單 ——
+const checklistItems = [
+  "護照（效期 6 個月以上）", "Visit Japan Web 已登錄、QR 已截圖", "eSIM / 網卡已買",
+  "日圓現金（每人 3～5 萬）", "國際信用卡（Visa/Master）", "常備藥、暈車藥",
+  "轉接頭（日本插座與台灣同，多為兩孔可不用）", "行李箱有空間裝伴手禮", "保暖外套（3月福岡早晚冷）"
+];
+
+// —— 保命日語 ——
+const japanesePhrases = [
+  { cat:"基本", items:[
+    { jp:"すみません", romaji:"su-mi-ma-sen", zh:"不好意思／請問（萬用）" },
+    { jp:"ありがとうございます", romaji:"a-ri-ga-tou go-za-i-masu", zh:"謝謝" },
+    { jp:"大丈夫です", romaji:"dai-jou-bu desu", zh:"沒關係／不用了" },
+  ]},
+  { cat:"點餐", items:[
+    { jp:"これをください", romaji:"ko-re wo ku-da-sai", zh:"我要這個（指菜單）" },
+    { jp:"おすすめは何ですか", romaji:"o-su-su-me wa nan desu ka", zh:"有什麼推薦的？" },
+    { jp:"替玉お願いします", romaji:"kae-dama o-ne-gai shi-masu", zh:"我要加麵（拉麵店）" },
+    { jp:"お会計お願いします", romaji:"o-kai-kei o-ne-gai shi-masu", zh:"買單" },
+  ]},
+  { cat:"購物", items:[
+    { jp:"いくらですか", romaji:"i-ku-ra desu ka", zh:"多少錢？" },
+    { jp:"免税できますか", romaji:"men-zei de-ki-masu ka", zh:"可以免稅嗎？" },
+    { jp:"カード使えますか", romaji:"kaa-do tsu-ka-e-masu ka", zh:"可以刷卡嗎？" },
+  ]},
+  { cat:"問路・求助", items:[
+    { jp:"トイレはどこですか", romaji:"toi-re wa do-ko desu ka", zh:"廁所在哪裡？" },
+    { jp:"駅はどこですか", romaji:"eki wa do-ko desu ka", zh:"車站在哪裡？" },
+    { jp:"助けてください", romaji:"ta-su-ke-te ku-da-sai", zh:"請幫幫我（緊急）" },
+  ]},
+];
+
+// —— 必買清單 ——
+const shoppingList = [
+  { cat:"食品伴手禮", items:["明太子（福さ屋／やまや）","博多通りもん","博多の女","二鶴堂 博多の石畳","めんべい 明太子仙貝","ひよ子饅頭"] },
+  { cat:"藥妝・零食", items:["合味道杯麵限定口味","Royce 生巧克力","柿の種","休足時間 貼布","蒸氣眼罩","地區限定 Kit Kat"] },
+  { cat:"雜貨", items:["無印良品限定品","唐吉訶德掃貨","博多站限定周邊","龍貓／吉卜力小物"] },
+];
+
+/* =================================================================
+   ⑤ Firebase 設定：把你自己的金鑰貼進來（教學文件 STEP 5）
+   還沒設定前，分帳頁會顯示教學卡、其他功能照常運作
+   ================================================================= */
+const firebaseConfig = {
+  apiKey:            "貼上你的_apiKey",
+  authDomain:        "貼上你的.firebaseapp.com",
+  databaseURL:       "https://貼上你的-default-rtdb.firebasedatabase.app",
+  projectId:         "貼上你的_projectId",
+  storageBucket:     "貼上你的.appspot.com",
+  messagingSenderId: "貼上你的_senderId",
+  appId:             "貼上你的_appId"
+};
+// 這一團的「房間代號」，同一團的人代號要一樣，資料才會同步
+const TRIP_CODE = "fukuoka-2026";
+// 判斷是否已設定（還是占位字串就當作沒設定）
+const FIREBASE_READY = !firebaseConfig.databaseURL.includes("貼上");
+
+
+/* =================================================================
+   程式邏輯（要改行程通常不用動這裡）
+   ================================================================= */
+let RATE = 0.215;            // 1 JPY = ? TWD
+let expenses = [];           // 從 Firebase 同步下來的花費陣列
+let db = null;
+
+// —— 分頁切換 ——
+function switchMainTab(key){
+  document.querySelectorAll('.main-view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.top-nav-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById('view-'+key).classList.add('active');
+  document.getElementById('top-tab-'+key).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+  lucide.createIcons();
+}
+
+// —— Toast 小提示 ——
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.opacity = '1'; t.style.transform = 'translate(-50%, -6px)';
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transform='translate(-50%,0)'; }, 1800);
+}
+
+/* ---------- 行程 ---------- */
+let currentDay = 1;
+function renderDayTabs(){
+  const box = document.getElementById('day-tabs');
+  box.innerHTML = Object.keys(tripDaysData).map(n=>{
+    const active = (+n===currentDay);
+    return `<button onclick="switchDay(${n})"
+      class="px-4 py-2 rounded-full text-sm whitespace-nowrap ${active?'bg-brand text-white':'bg-white text-gray-500'} shadow-sm">
+      Day ${n}<span class="opacity-70 ml-1">${tripDaysData[n].dateStr.slice(0,5)}</span></button>`;
+  }).join('');
+}
+function switchDay(n){ currentDay=n; renderDayTabs(); renderDay(); }
+
+function renderDay(){
+  const d = tripDaysData[currentDay];
+  // 地圖
+  document.getElementById('day-map').src =
+    'https://maps.google.com/maps?q='+encodeURIComponent(d.mapQuery)+'&output=embed';
+  // 亮點（有 quest 的就做成可點的探索卡）
+  document.getElementById('day-highlights').innerHTML = d.highlights.map(h=>{
+    const done = !!getQuestState()[h.key];
+    return `<button onclick="openQuest('${h.key}')"
+       class="quest-card ${done?'done':''} bg-white border border-transparent rounded-2xl p-3 text-left shadow-sm">
+       <div class="flex items-center justify-between">
+         <span class="font-bold text-sm">${h.title}</span>
+         ${done?'<i data-lucide="badge-check" class="w-4 h-4 text-brand"></i>':'<i data-lucide="sparkles" class="w-4 h-4 text-brand/60"></i>'}
+       </div>
+       <p class="text-xs text-gray-500 mt-1">${h.sub}</p>
+       <p class="text-[11px] text-brand mt-1">${done?'已完成小探索':'點我開始小探索'}</p>
+    </button>`;
+  }).join('');
+  // 時間軸
+  document.getElementById('day-timeline').innerHTML = `
+    <div class="bg-white rounded-2xl p-4 shadow-sm mb-3">
+      <p class="font-serif text-lg font-bold">${d.title}</p>
+      <p class="text-sm text-gray-500 mt-1">${d.desc}</p>
+    </div>
+    <div class="relative pl-8">
+      <div class="timeline-line absolute left-3 top-2 bottom-2 w-0.5"></div>
+      ${d.activities.map(a=>`
+        <div class="relative mb-4">
+          <div class="absolute -left-8 top-0 w-6 h-6 rounded-full bg-brand/15 flex items-center justify-center">
+            <i data-lucide="${a.icon}" class="w-3.5 h-3.5 text-brand"></i>
+          </div>
+          <div class="bg-white rounded-2xl p-3 shadow-sm">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-sm">${a.title}</span>
+              <span class="text-xs text-brand font-semibold">${a.time}</span>
+            </div>
+            ${a.sub?`<p class="text-xs text-gray-500 mt-1">${a.sub}</p>`:''}
+            <span class="inline-block text-[10px] bg-cream text-brandDark px-2 py-0.5 rounded-full mt-2">${a.category}</span>
+          </div>
+        </div>`).join('')}
+    </div>`;
+  lucide.createIcons();
+}
+
+/* ---------- 小探索（存在 localStorage） ---------- */
+const QUEST_STORAGE_KEY = 'fukuokaQuestState';
+function getQuestState(){ try{ return JSON.parse(localStorage.getItem(QUEST_STORAGE_KEY)||'{}'); }catch(e){ return {}; } }
+let activeQuestKey = null;
+function openQuest(key){
+  activeQuestKey = key;
+  const q = questData[key]; if(!q) return;
+  document.getElementById('quest-title').textContent = q.title;
+  document.getElementById('quest-desc').textContent = q.desc;
+  document.getElementById('quest-question').textContent = q.question;
+  document.getElementById('quest-reward').textContent = q.reward;
+  document.getElementById('quest-icon').setAttribute('data-lucide', q.icon);
+  const done = getQuestState()[key];
+  document.getElementById('quest-options').innerHTML = q.options.map((o,i)=>`
+    <button onclick="completeQuest(${i})"
+      class="w-full text-left border rounded-xl px-3 py-2 text-sm ${done&&done.selectedOption===i?'bg-brand text-white border-brand':'bg-white'}">
+      ${o}</button>`).join('');
+  document.getElementById('quest-modal').classList.remove('hidden');
+  lucide.createIcons();
+}
+function closeQuest(){ document.getElementById('quest-modal').classList.add('hidden'); }
+function completeQuest(optionIndex){
+  const state = getQuestState();
+  const first = !state[activeQuestKey];
+  state[activeQuestKey] = { completedAt:new Date().toISOString(), selectedOption:optionIndex };
+  localStorage.setItem(QUEST_STORAGE_KEY, JSON.stringify(state));
+  closeQuest(); renderDay();
+  showToast(first ? '🏅 獲得徽章：'+questData[activeQuestKey].reward : '已更新');
+}
+function resetQuestState(){
+  if(confirm('確定要重置所有小探索的紀錄嗎？')){
+    localStorage.removeItem(QUEST_STORAGE_KEY); renderDay(); showToast('小探索已重置！');
+  }
+}
+
+/* ---------- 勾選清單（檢查清單 / 必買，共用同一套） ---------- */
+function makeCheckList(containerId, storageKey, groups){
+  const state = (()=>{ try{ return JSON.parse(localStorage.getItem(storageKey)||'{}'); }catch(e){ return {}; } })();
+  const box = document.getElementById(containerId);
+  const render = ()=>{
+    box.innerHTML = groups.map(g=>`
+      ${g.cat?`<p class="font-bold text-brandDark text-sm mt-2 mb-1 px-2">${g.cat}</p>`:''}
+      ${g.items.map(item=>{
+        const id = storageKey+'::'+item;
+        const on = !!state[id];
+        return `<label class="flex items-center gap-3 px-2 py-2 cursor-pointer">
+          <input type="checkbox" ${on?'checked':''} onchange="window.__toggle('${storageKey}','${id.replace(/'/g,"\\'")}')"
+                 class="w-5 h-5 accent-brand rounded">
+          <span class="text-sm ${on?'line-through text-gray-400':''}">${item}</span>
+        </label>`;
+      }).join('')}`).join('');
+  };
+  window.__toggle = (sk, id)=>{
+    const s = JSON.parse(localStorage.getItem(sk)||'{}');
+    s[id] = !s[id]; localStorage.setItem(sk, JSON.stringify(s));
+    Object.assign(state, s); render();
+  };
+  render();
+}
+
+/* ---------- 保命日語 ---------- */
+function renderPhrases(){
+  document.getElementById('phrase-container').innerHTML = japanesePhrases.map(g=>`
+    <div>
+      <p class="font-bold text-brandDark mb-2">${g.cat}</p>
+      <div class="space-y-2">
+        ${g.items.map(p=>`
+          <div class="bg-white rounded-2xl p-3 shadow-sm">
+            <p class="text-lg font-bold">${p.jp}</p>
+            <p class="text-xs text-gray-400">${p.romaji}</p>
+            <p class="text-sm text-brandDark mt-1">${p.zh}</p>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+/* =================================================================
+   ⑥ 分帳（Firebase 即時共用）
+   ================================================================= */
+function initAccounting(){
+  const setup = document.getElementById('firebase-setup');
+  const body  = document.getElementById('acc-body');
+
+  if(!FIREBASE_READY){                 // 還沒設定 → 顯示教學卡
+    setup.classList.remove('hidden');
+    return;
+  }
+  setup.classList.add('hidden');
+  body.classList.remove('hidden');
+
+  // 連 Firebase
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+
+  // 下拉選單填入團員
+  const payer = document.getElementById('exp-payer');
+  payer.innerHTML = MEMBERS.map(m=>`<option>${m}</option>`).join('');
+  document.getElementById('exp-beneficiaries').innerHTML = MEMBERS.map(m=>`
+    <label class="text-xs border rounded-full px-2 py-1 cursor-pointer">
+      <input type="checkbox" class="ben-box mr-1 accent-brand" value="${m}" checked>${m}</label>`).join('');
+
+  // 即時監聽：任何人新增/刪除，所有人畫面自動更新
+  db.ref('trips/'+TRIP_CODE+'/expenses').on('value', snap=>{
+    const val = snap.val() || {};
+    expenses = Object.keys(val).map(id=>({ id, ...val[id] }));
+    renderAccounting();
+  });
+}
+
+function addExpense(){
+  const title = document.getElementById('exp-title').value.trim();
+  const amount = parseFloat(document.getElementById('exp-amount').value);
+  if(!title || !amount){ showToast('請填項目和金額'); return; }
+  const beneficiaries = [...document.querySelectorAll('.ben-box:checked')].map(b=>b.value);
+  if(beneficiaries.length===0){ showToast('至少要分給一個人'); return; }
+
+  const record = {
+    title,
+    amount,
+    currency: document.getElementById('exp-currency').value,
+    payer:    document.getElementById('exp-payer').value,
+    category: document.getElementById('exp-category').value,
+    beneficiaries,
+    createdAt: Date.now()
+  };
+  db.ref('trips/'+TRIP_CODE+'/expenses').push(record);   // 推上 Firebase
+  document.getElementById('exp-title').value = '';
+  document.getElementById('exp-amount').value = '';
+  showToast('已記一筆 ✅');
+}
+
+function deleteExpense(id){
+  if(confirm('刪除這筆花費？')) db.ref('trips/'+TRIP_CODE+'/expenses/'+id).remove();
+}
+
+// 把任何幣別換算成日圓（結算統一用日圓算）
+function toJPY(amount, currency){ return currency==='TWD' ? amount/RATE : amount; }
+
+function renderAccounting(){
+  // 1) 每人結餘 = 幫大家墊付的 − 自己該分攤的
+  const bal = {}; MEMBERS.forEach(m=>bal[m]=0);
+  expenses.forEach(e=>{
+    const jpy = toJPY(e.amount, e.currency);
+    const share = jpy / e.beneficiaries.length;
+    bal[e.payer] = (bal[e.payer]||0) + jpy;         // 付錢的先加全額
+    e.beneficiaries.forEach(b=> bal[b] = (bal[b]||0) - share); // 每個分攤者扣一份
+  });
+
+  // 2) 每人結餘卡
+  document.getElementById('members-balance-container').innerHTML = MEMBERS.map(m=>{
+    const v = Math.round(bal[m]||0);
+    const color = v>0?'text-green-600':(v<0?'text-red-500':'text-gray-400');
+    const txt = v>0?`應收 ¥${v}`:(v<0?`應付 ¥${-v}`:'剛好');
+    return `<div class="bg-white rounded-xl p-3 shadow-sm">
+      <p class="text-sm font-bold">${m}</p><p class="text-xs ${color}">${txt}</p></div>`;
+  }).join('');
+
+  // 3) 結算：最少筆數「誰還誰」
+  document.getElementById('settlement-list').innerHTML =
+    settle(bal).map(s=>`
+      <div class="bg-white rounded-xl p-3 shadow-sm flex items-center justify-between text-sm">
+        <span><b>${s.from}</b> → <b>${s.to}</b></span>
+        <span class="text-brand font-bold">¥${s.amount}（約 NT$${Math.round(s.amount*RATE)}）</span>
+      </div>`).join('') || '<p class="text-sm text-gray-400">目前沒有需要結算的款項</p>';
+
+  // 4) 花費明細
+  document.getElementById('expense-list-container').innerHTML = expenses
+    .slice().sort((a,b)=>b.createdAt-a.createdAt).map(e=>`
+      <div class="bg-white rounded-xl p-3 shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-sm font-bold">${e.category.split(' ')[0]} ${e.title}</p>
+          <p class="text-xs text-gray-500">${e.payer} 付 · 分 ${e.beneficiaries.length} 人</p>
+        </div>
+        <div class="text-right">
+          <p class="text-sm font-bold">${e.currency==='JPY'?'¥':'NT$'}${e.amount}</p>
+          <button onclick="deleteExpense('${e.id}')" class="text-[11px] text-red-400">刪除</button>
+        </div>
+      </div>`).join('') || '<p class="text-sm text-gray-400">還沒有任何花費</p>';
+}
+
+// 結算演算法：把「應收的人」和「應付的人」配對，湊出最少的還款筆數
+function settle(bal){
+  const creditors = [], debtors = [];
+  Object.keys(bal).forEach(m=>{
+    const v = Math.round(bal[m]);
+    if(v>0) creditors.push({m, v});
+    else if(v<0) debtors.push({m, v:-v});
+  });
+  creditors.sort((a,b)=>b.v-a.v); debtors.sort((a,b)=>b.v-a.v);
+  const res = []; let i=0, j=0;
+  while(i<debtors.length && j<creditors.length){
+    const pay = Math.min(debtors[i].v, creditors[j].v);
+    if(pay>0) res.push({ from:debtors[i].m, to:creditors[j].m, amount:pay });
+    debtors[i].v -= pay; creditors[j].v -= pay;
+    if(debtors[i].v===0) i++;
+    if(creditors[j].v===0) j++;
+  }
+  return res;
+}
+
+function updateRate(){
+  RATE = parseFloat(document.getElementById('acc-rate-input').value) || 0.215;
+  if(FIREBASE_READY) renderAccounting();
+}
+
+/* =================================================================
+   啟動
+   ================================================================= */
+window.addEventListener('DOMContentLoaded', ()=>{
+  renderDayTabs(); renderDay();
+  makeCheckList('checklist', 'fukuokaChecklist', [{cat:'', items:checklistItems}]);
+  makeCheckList('shopping-container', 'fukuokaShopping', shoppingList);
+  renderPhrases();
+  initAccounting();
+  lucide.createIcons();
+});
+</script>
+</body>
+</html>
