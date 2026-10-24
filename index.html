@@ -414,8 +414,8 @@ const tripDaysData = {
       { title: "中洲屋台", sub: "河畔夜市小攤", key: "d1_yatai" },
     ],
     activities: [
-      { time:"10:00", icon:"plane",     title:"抵達福岡機場",         sub:"虎航IT240 06:45→10:00，入境領行李", category:"交通" },
-      { time:"10:40", icon:"train-front", title:"地下鐵進市區",       sub:"空港線 6 分到博多站（¥260）", category:"交通" },
+      { time:"10:00", icon:"plane",     title:"抵達福岡機場",         sub:"虎航IT240 06:45→10:00，入境領行李", category:"交通", map:"福岡空港" },
+      { time:"10:40", icon:"train-front", title:"地下鐵進市區",       sub:"空港線 6 分到博多站（¥260）", category:"交通", map:"博多駅" },
       { time:"13:00", icon:"hotel",     title:"飯店寄行李",            sub:"太早不能入住，先寄行李", category:"住宿" },
       { time:"13:30", icon:"utensils",  title:"午餐：博多拉麵",        sub:"點我看 3 家推薦", category:"餐飲", dining:"d1_lunch", opt:false },
       { time:"14:45", icon:"landmark",  title:"櫛田神社・東長寺",       sub:"博多老街寺廟、博多大佛(古建築、居民信仰)", category:"景點", opt:false },
@@ -435,13 +435,13 @@ const tripDaysData = {
       { title: "御守", sub: "太宰府・竈門結緣", key: "d2_omamori" },
     ],
     activities: [
-      { time:"08:45", icon:"bus",       title:"博多筑紫口 集合發車",   sub:"FunTOUR巴士，09:00發車", category:"交通" },
+      { time:"08:45", icon:"bus",       title:"博多筑紫口 集合發車",   sub:"FunTOUR巴士，09:00發車", category:"交通", map:"博多駅 筑紫口" },
       { time:"10:00", icon:"landmark",  title:"雷山千如寺大悲王院",     sub:"五百羅漢＋秋楓(入場¥500)", category:"景點", opt:false },
       { time:"11:30", icon:"sailboat",  title:"柳川川下り 遊船",       sub:"巴士旅客包船、約70分", category:"景點", opt:false },
       { time:"12:40", icon:"utensils",  title:"午餐：柳川鰻魚せいろ蒸し", sub:"點我看 3 家推薦", category:"餐飲", dining:"d3_lunch", opt:false },
       { time:"14:30", icon:"torii-gate",title:"太宰府天満宮",          sub:"梅ヶ枝餅、表參道", category:"景點", opt:false },
       { time:"16:30", icon:"landmark",  title:"竈門神社",             sub:"結緣神社、鬼滅聖地、紅葉", category:"景點", opt:false },
-      { time:"19:00", icon:"bus",       title:"回博多",              sub:"約19:00抵達博多站", category:"交通" },
+      { time:"19:00", icon:"bus",       title:"回博多",              sub:"約19:00抵達博多站", category:"交通", map:"博多駅" },
       { time:"19:30", icon:"soup",      title:"晚餐：もつ鍋／屋台",     sub:"點我看 3 家推薦", category:"餐飲", dining:"d2_dinner", opt:false },
     ]
   },
@@ -476,12 +476,14 @@ const tripDaysData = {
       { title: "小倉城", sub: "天守閣眺望(加碼)", key: "d4_castle" },
     ],
     activities: [
-      { time:"09:00", icon:"train",     title:"JR 直達門司港",         sub:"博多快速約1.5小時(¥1,310)", category:"交通" },
+      { time:"09:00", icon:"train",     title:"博多→門司港",          sub:"鹿兒島本線快速約1.5小時(¥1,310)；或Sonic音速號約45分", category:"交通", map:"門司港駅" },
       { time:"10:30", icon:"building",  title:"門司港復古地區",        sub:"大正洋風建築、海邊平緩好走(古建築)", category:"景點", opt:false },
       { time:"12:00", icon:"utensils",  title:"午餐：門司港燒咖哩",     sub:"點我看 3 家推薦", category:"餐飲", dining:"d4_lunch", opt:false },
       { time:"13:30", icon:"waves",     title:"關門海峽海邊散步",       sub:"看海、坐潮風号觀光列車", category:"景點", opt:false },
-      { time:"15:00", icon:"castle",    title:"小倉城(加碼)",          sub:"回程小倉下車；累了可略過直接回", category:"景點", opt:true },
+      { time:"14:30", icon:"train",     title:"門司港→小倉",          sub:"JR鹿兒島本線約13分", category:"交通", map:"小倉駅" },
+      { time:"15:00", icon:"castle",    title:"小倉城(加碼)",          sub:"小倉站下車；累了可略過直接回", category:"景點", opt:true },
       { time:"16:00", icon:"store",     title:"旦過市場(傳統市場)",     sub:"小倉的廚房、百年老市場、在地小吃，媽媽會喜歡", category:"景點", opt:true },
+      { time:"17:30", icon:"train-front", title:"小倉→回博多",         sub:"鹿兒島本線快速約1h15／Sonic音速號約45分", category:"交通", map:"博多駅" },
       { time:"18:30", icon:"utensils",  title:"晚餐：水炊き",          sub:"點我看 3 家推薦", category:"餐飲", dining:"d4_dinner", opt:false },
     ]
   },
@@ -490,19 +492,20 @@ const tripDaysData = {
     title: "唐津くんち祭典日（熱氣球加碼）",
     desc: "白天坐著看14台曳山巡行；想看熱氣球再加碼(清晨升空要早起，或看傍晚點燈)",
     mapQuery: "唐津神社",
-    transport: "JR直通到唐津約80分。佐賀熱氣球為加碼(佐賀約40分)：清晨升空需5:30出發，或改看傍晚點燈較不累",
+    transport: "【不看熱氣球】博多搭地下鐵直通筑肥線直達唐津約80~90分。【看熱氣球加碼】先博多→佐賀「バルーンさが」臨時站(JR特急約40分，搭早班車趕清晨約07:00一齊離陸)，再佐賀→唐津(JR唐津線約70分，班次少先查好時刻)接祭典。祭典與熱氣球皆免費入場",
     budget: "約 ¥7,000~8,500 /人(JR來回+餐；祭典、熱氣球皆免費入場)",
     highlights: [
       { title: "熱氣球升空", sub: "清晨一齊離陸(加碼)", key: "d5_balloon" },
       { title: "唐津曳山", sub: "14台巨型花車", key: "d5_kunchi" },
     ],
     activities: [
-      { time:"05:30", icon:"alarm-clock", title:"(加碼)佐賀熱氣球 清晨升空", sub:"想看百顆一齊升空才需早起，不勉強長輩", category:"景點", opt:true },
-      { time:"09:30", icon:"train",     title:"睡飽出發往唐津",        sub:"約80分，不用趕", category:"交通" },
+      { time:"05:40", icon:"train",     title:"(加碼)博多→佐賀 看熱氣球", sub:"搭早班JR往「バルーンさが」臨時站約40分，趕清晨一齊離陸（不看可跳過）", category:"交通", opt:true, map:"バルーンさが駅" },
+      { time:"07:00", icon:"alarm-clock", title:"(加碼)佐賀熱氣球 一齊離陸", sub:"清晨約百顆熱氣球一齊升空，最震撼；不勉強長輩", category:"景點", opt:true, map:"佐賀インターナショナルバルーンフェスタ 会場" },
+      { time:"09:30", icon:"train",     title:"前往唐津",            sub:"看完熱氣球：佐賀→唐津 JR唐津線約70分｜沒看熱氣球：博多直通筑肥線約80分", category:"交通", map:"唐津駅" },
       { time:"11:30", icon:"utensils",  title:"唐津午餐",             sub:"點我看 3 家推薦", category:"餐飲", dining:"d5_lunch", opt:false },
       { time:"13:30", icon:"party-popper", title:"唐津くんち 曳山巡行", sub:"找位子坐著看14台大花車經過(傳統祭典)", category:"景點", opt:false },
       { time:"15:00", icon:"landmark",  title:"唐津神社・舊唐津銀行",   sub:"辰野金吾洋館(古建築)，想走再去，不然找咖啡歇腳", category:"景點", opt:true },
-      { time:"17:00", icon:"train-front", title:"回博多",             sub:"", category:"交通" },
+      { time:"17:00", icon:"train-front", title:"唐津→回博多",         sub:"地下鐵直通筑肥線約80分", category:"交通", map:"博多駅" },
     ]
   },
   6: {
@@ -518,9 +521,9 @@ const tripDaysData = {
     ],
     activities: [
       { time:"06:40", icon:"hotel",     title:"退房、寄行李",          sub:"行李前一晚先打包好", category:"住宿" },
-      { time:"07:20", icon:"train",     title:"地鐵往福岡空港",        sub:"博多6分到(¥260)", category:"交通" },
+      { time:"07:20", icon:"train",     title:"地鐵往福岡空港",        sub:"博多6分到(¥260)", category:"交通", map:"福岡空港" },
       { time:"07:45", icon:"shopping-bag", title:"機場報到＋最後採買",   sub:"虎航國際線建議起飛前2小時到；明太子/通りもん/藥妝機場都有", category:"購物", opt:false },
-      { time:"10:55", icon:"plane",     title:"福岡 → 桃園 IT241",     sub:"10:55→12:40，T1（台灣虎航）", category:"交通" },
+      { time:"10:55", icon:"plane",     title:"福岡 → 桃園 IT241",     sub:"10:55→12:40，T1（台灣虎航）", category:"交通", map:"福岡空港" },
     ]
   }
 };
@@ -701,7 +704,8 @@ const festivals = [
     name:"佐賀國際熱氣球節", jp:"佐賀インターナショナルバルーンフェスタ",
     dateStr:"10/30(五) ～ 11/03(火)", overlap:true,
     place:"佐賀市 嘉瀬川河川敷（會場旁有JR臨時站「バルーンさが」）",
-    from:"博多搭JR特急到佐賀約40分，再往會場",
+    from:"博多搭JR特急到佐賀約40分→會場旁「バルーンさが」臨時站；看完接唐津くんち：佐賀→唐津 JR唐津線約70分",
+    map:"佐賀インターナショナルバルーンフェスタ 会場",
     desc:"亞洲最大級熱氣球賽，約100顆熱氣球、80萬人。清晨的「一齊離陸」最震撼；傍晚有夜間點燈係留（バルーンイリュージョン）。你們整段旅程都在檔期內。",
     tags:["亞洲最大","清晨最精彩","免費入場"],
     links:[
@@ -715,6 +719,7 @@ const festivals = [
     dateStr:"11/02(一) 宵山 ～ 11/04(三)", overlap:true,
     place:"佐賀縣唐津市 唐津神社周邊",
     from:"博多搭地下鐵直通JR筑肥線到唐津約70~90分",
+    map:"唐津神社",
     desc:"約400年歷史的秋季大祭，14台巨大豪華「曳山」在町內遊行，已列入UNESCO無形文化遺產。11/2夜晚宵山點燈、11/3御旅所神幸最盛大，對到你們第4~6天。",
     tags:["UNESCO","400年歷史","14台曳山"],
     links:[
@@ -728,6 +733,7 @@ const festivals = [
     dateStr:"11月中下旬見頃（你們去可能剛開始轉紅）", overlap:false,
     place:"太宰府 寶滿宮竈門神社（可接第2天太宰府行程）",
     from:"太宰府站轉社區巴士約10分",
+    map:"寶滿宮竈門神社",
     desc:"太宰府後山的紅葉名所，也是知名的結緣神社。你們日期偏早，楓葉可能剛轉紅，但順路可碰運氣、拍秋色。",
     tags:["順路太宰府","結緣神社","賞楓"],
     links:[
@@ -1030,6 +1036,7 @@ function renderFestivals(){
       <div class="flex items-start gap-2 text-xs text-gray-500 mt-1">
         <i data-lucide="train" class="w-3.5 h-3.5 mt-0.5"></i><span>${f.from}</span>
       </div>
+      <a href="https://www.google.com/maps/search/${encodeURIComponent(f.map||f.name)}" target="_blank" class="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full bg-brand/10 text-brandDark mt-2"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>會場地圖</a>
       <p class="text-sm mt-3 leading-relaxed">${f.desc}</p>
       <div class="flex flex-wrap gap-1 mt-2">
         ${f.tags.map(t=>`<span class="text-[10px] bg-cream text-brandDark px-2 py-0.5 rounded-full">#${t}</span>`).join('')}
