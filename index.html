@@ -418,7 +418,7 @@ const tripDaysData = {
       { time:"10:40", icon:"train-front", title:"地下鐵進市區",       sub:"空港線 6 分到博多站（¥260）", category:"交通", map:"博多駅" },
       { time:"13:00", icon:"hotel",     title:"飯店寄行李",            sub:"太早不能入住，先寄行李", category:"住宿" },
       { time:"13:30", icon:"utensils",  title:"午餐：博多拉麵",        sub:"點我看 3 家推薦", category:"餐飲", dining:"d1_lunch", opt:false },
-      { time:"14:45", icon:"landmark",  title:"櫛田神社・東長寺",       sub:"博多老街寺廟、博多大佛(古建築、居民信仰)", category:"景點", opt:false },
+      { time:"14:45", icon:"landmark",  title:"櫛田神社・東長寺",       sub:"⛩️順路參拜【財神】櫛田總鎮守求商売繁盛・財運；東長寺博多大佛(古建築、居民信仰)", category:"景點", opt:false, map:"櫛田神社 福岡" },
       { time:"15:45", icon:"shopping-bag", title:"Canal City 博多",   sub:"運河城，整點噴泉秀(加碼)", category:"景點", opt:true },
       { time:"16:30", icon:"hotel",     title:"回飯店休息",            sub:"進房、歇腳、養精神", category:"住宿" },
       { time:"18:30", icon:"lamp",      title:"中洲屋台晚餐",          sub:"點我看 3 家推薦", category:"餐飲", dining:"d1_dinner", opt:false },
@@ -440,7 +440,7 @@ const tripDaysData = {
       { time:"11:30", icon:"sailboat",  title:"柳川川下り 遊船",       sub:"巴士旅客包船、約70分", category:"景點", opt:false },
       { time:"12:40", icon:"utensils",  title:"午餐：柳川鰻魚せいろ蒸し", sub:"點我看 3 家推薦", category:"餐飲", dining:"d3_lunch", opt:false },
       { time:"14:30", icon:"torii-gate",title:"太宰府天満宮",          sub:"梅ヶ枝餅、表參道", category:"景點", opt:false },
-      { time:"16:30", icon:"landmark",  title:"竈門神社",             sub:"結緣神社、鬼滅聖地、紅葉", category:"景點", opt:false },
+      { time:"16:30", icon:"landmark",  title:"竈門神社",             sub:"⛩️順路參拜【月老】九州最有名結緣神社，求良緣・戀愛成就，推薦寫戀愛繪馬；鬼滅聖地、紅葉", category:"景點", opt:false, map:"寶滿宮竈門神社" },
       { time:"19:00", icon:"bus",       title:"回博多",              sub:"約19:00抵達博多站", category:"交通", map:"博多駅" },
       { time:"19:30", icon:"soup",      title:"晚餐：もつ鍋／屋台",     sub:"點我看 3 家推薦", category:"餐飲", dining:"d2_dinner", opt:false },
     ]
@@ -457,6 +457,7 @@ const tripDaysData = {
     ],
     activities: [
       { time:"10:00", icon:"trees",     title:"大濠公園・福岡城跡",     sub:"湖畔散步、天守台遺跡，長輩超舒服", category:"景點", opt:false },
+      { time:"11:00", icon:"landmark",  title:"⛩️順路參拜：十日恵比須神社", sub:"【財神】博多最有名財神・商売繁盛，求生意興隆・財運；地下鐵千代縣廳口站5分，想拜財神就繞來，推薦求商賣繁盛御守", category:"景點", opt:true, map:"十日恵比須神社" },
       { time:"12:00", icon:"utensils",  title:"午餐：天神／大名",        sub:"點我看 3 家推薦", category:"餐飲", dining:"d3_dinner", opt:false },
       { time:"14:00", icon:"shopping-bag", title:"【崇慧採購】天神電器・美妝藥品", sub:"ビックカメラ天神＋ドン・キホーテ本店＋大國藥妝，一次買足", category:"購物", opt:false },
       { time:"16:00", icon:"hotel",     title:"回飯店休息",            sub:"歇腳、放戰利品", category:"住宿" },
@@ -758,6 +759,13 @@ const altData = [
     { name:"久留米 柿狩り（右田果樹園）", note:"採柿＋酒莊，10/1~11/30當季，久留米田主丸、較遠" },
     { name:"別府 地獄溫泉", note:"七彩溫泉奇景，經典九州溫泉鄉(較遠)" },
     { name:"秋月 城下町", note:"『筑前小京都』，晚秋紅葉、古街寧靜" },
+  ]},
+  { cat:"⛩️ 財神・月老參拜（求財運・姻緣）", items:[
+    { name:"寶滿宮竈門神社（太宰府）", note:"【月老・結緣】九州最有名結緣神社，求良緣・戀愛成就。已排在 Day2 順路必拜；推薦寫戀愛繪馬、求縁結び御守" },
+    { name:"十日恵比須神社（博多）", note:"【財神・商売繁盛】博多最有名財神，求生意興隆・財運；地下鐵千代縣廳口站5分。已排在 Day3 市區日順路；推薦求商賣繁盛御守" },
+    { name:"櫛田神社（博多）", note:"【財神・商売繁盛】博多總鎮守，求財運生意；已排在 Day1 順路參拜" },
+    { name:"恋木神社（筑後市 水田天満宮內）", note:"【月老・戀愛】全日本唯一主祀戀愛之神，境內滿滿愛心裝飾、情侶超人氣；近柳川但要稍繞(JR羽犬塚站＋計程車約10分)，想專程求姻緣可加" },
+    { name:"祐徳稲荷神社（佐賀・鹿島）", note:"【財神・金運】日本三大稻荷之一，朱紅懸造本殿超壯觀、金運靈驗；在佐賀南邊、與唐津反方向，需專程(佐賀→鹿島約40分)" },
   ]},
   { cat:"⚠️ 時間要注意（可能錯過）", items:[
     { name:"宮地嶽神社「光之道」", note:"夕陽光之道2026年10月場約到10/20~25就結束，你們10/30才到剛好錯過；神社本身(大注連繩)仍可參拜" },
