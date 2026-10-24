@@ -114,7 +114,7 @@
       <p class="text-2xl font-bold text-brand">6</p><p class="text-xs text-gray-500">天 5 夜</p>
     </div>
     <div class="bg-white rounded-2xl p-3 text-center shadow-sm">
-      <p class="text-2xl font-bold text-brand">5</p><p class="text-xs text-gray-500">位團員</p>
+      <p class="text-2xl font-bold text-brand">4</p><p class="text-xs text-gray-500">位團員</p>
     </div>
   </div>
 
@@ -174,10 +174,11 @@
   </h2>
   <div class="bg-white rounded-2xl p-4 shadow-sm text-sm space-y-2">
     <p><b>航班（台灣虎航）：</b>去 IT240　10/30 TPE 06:45→FUK 10:00（T1）<br>回 IT241　11/4 FUK 10:55→TPE 12:40（T1）・行李20kg</p>
+    <p><b>台灣出發報到：</b>桃園機場 <b>第一航廈（T1）</b>虎航櫃台。虎航<b>起飛前 3 小時開櫃</b>、<b>起飛前約 1 小時關櫃</b>；去程 06:45，建議 <b>04:00 前</b>到機場（清晨出境人多、過海關要時間）。托運每人 20kg、隨身限 10kg，超重罰很兇。</p>
+    <p><b>回程報到：</b>福岡機場（FUK）國際線航廈，同樣建議起飛前 2.5~3 小時到（10:55 班機約 08:00 前到機場）。</p>
+    <p><b>出發前必做：</b><a href="https://www.vjw.digital.go.jp/" target="_blank" class="text-brand font-semibold underline underline-offset-2">Visit Japan Web 入境登錄</a>（入境審查＋海關申報 QR，建議出發前幾天先填好，過關更快）。</p>
     <p><b>報警：</b>110（警察）／ 119（火災・救護車）</p>
-    <p><b>駐福岡辦事處（台灣）：</b>+81-92-734-2810</p>
-    <p><b>領隊：</b>安妮姐 +886-9xx-xxx-xxx</p>
-    <a href="https://maps.google.com/maps?q=博多駅&output=embed" class="hidden"></a>
+    <p><b>駐福岡辦事處（台灣）：</b>+81-92-734-2810</p>    <a href="https://maps.google.com/maps?q=博多駅&output=embed" class="hidden"></a>
     <a href="https://www.google.com/maps/search/HOTEL%20FORZA%20Hakataeki%20Chikushi-guchi%20I" target="_blank"
        class="inline-flex items-center gap-1 text-brand font-semibold mt-1">
        <i data-lucide="map-pin" class="w-4 h-4"></i>飯店地圖導航
@@ -195,9 +196,9 @@
     <a href="https://www.vjw.digital.go.jp/" target="_blank" class="bg-white rounded-2xl p-4 shadow-sm text-sm font-semibold flex items-center gap-2">
       <i data-lucide="qr-code" class="w-5 h-5 text-brand"></i>Visit Japan Web 入境登錄
     </a>
-    <a href="https://www.google.com/search?q=福岡+eSIM" target="_blank" class="bg-white rounded-2xl p-4 shadow-sm text-sm font-semibold flex items-center gap-2">
-      <i data-lucide="wifi" class="w-5 h-5 text-brand"></i>eSIM 上網卡
-    </a>
+    <div class="bg-white rounded-2xl p-4 shadow-sm text-sm font-semibold flex items-center gap-2">
+      <i data-lucide="wifi" class="w-5 h-5 text-brand"></i>eSIM 已購買 ✅（QR 在群組）
+    </div>
     <a href="https://subway.city.fukuoka.lg.jp/" target="_blank" class="bg-white rounded-2xl p-4 shadow-sm text-sm font-semibold flex items-center gap-2">
       <i data-lucide="train" class="w-5 h-5 text-brand"></i>福岡地下鐵官網
     </a>
@@ -395,7 +396,7 @@
    ================================================================= */
 
 // —— 團員名單（分帳、探索都會用到）——
-const MEMBERS = ['安妮姐','崇慧','小佩','懷茹','yoyo'];
+const MEMBERS = ['安妮姐','崇慧','小佩','懷茹'];
 
 // —— 逐日行程 ——
 // 每一天：dateStr 日期、title 標題、desc 一句話、mapQuery 地圖搜尋字、
